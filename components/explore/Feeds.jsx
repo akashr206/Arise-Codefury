@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import { Play } from "lucide-react"
+import { Play, ExternalLink } from "lucide-react"
 import StoryDialog from "./StoryDialog"
 import Artwork from "./Artwork"
 
@@ -175,7 +175,7 @@ export default function Feeds() {
         {mockFeeds.map((feed) => (
           <div
             key={feed.id}
-            className="relative mb-4 break-inside-avoid cursor-pointer overflow-hidden rounded-xl shadow hover:shadow-lg transition"
+            className="relative mb-4 break-inside-avoid cursor-pointer overflow-hidden rounded-xl shadow hover:shadow-lg transition group"
             onClick={() => handleFeedClick(feed)}
           >
             <img
@@ -184,6 +184,13 @@ export default function Feeds() {
               className="w-full h-auto object-cover rounded-xl"
               loading="lazy"
             />
+
+            {/* Hover overlay for images (product pages) */}
+            {feed.type === "image" && (
+              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center rounded-xl">
+                <ExternalLink className="w-8 h-8 text-white" />
+              </div>
+            )}
 
             {/* Overlay for reels */}
             {feed.type === "story" && (

@@ -216,14 +216,7 @@ export default function Artwork({ artwork, onBack }) {
               ))}
             </div>
 
-            <div className="text-center">
-              <p className="text-sm text-muted-foreground">
-                {selectedImageIndex === 0 && "Main View"}
-                {selectedImageIndex === 1 && "Detail Close-up"}
-                {selectedImageIndex === 2 && "Framed Display"}
-                {selectedImageIndex === 3 && "Studio Setting"}
-              </p>
-            </div>
+          
           </div>
 
           <div className="space-y-8">
@@ -359,105 +352,7 @@ export default function Artwork({ artwork, onBack }) {
           </div>
         </div>
 
-        <div className="mt-16">
-          <Tabs defaultValue="story" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 bg-card/50 border border-primary/10">
-              <TabsTrigger
-                value="story"
-                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-              >
-                Story
-              </TabsTrigger>
-              <TabsTrigger
-                value="inspiration"
-                className="data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground"
-              >
-                Inspiration
-              </TabsTrigger>
-              <TabsTrigger
-                value="technique"
-                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-              >
-                Technique
-              </TabsTrigger>
-              <TabsTrigger
-                value="emotion"
-                className="data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground"
-              >
-                Emotion
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="story" className="mt-8">
-              <Card className="border-primary/20 shadow-lg">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-primary">
-                    <Sparkles className="w-5 h-5" />
-                    The Artist's Journey
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <p className="text-muted-foreground leading-relaxed text-lg">{artworkData.description}</p>
-                  <div className="border-t border-primary/10 pt-6">
-                    <h4 className="font-semibold mb-3 text-primary">Behind the Creation</h4>
-                    <p className="text-muted-foreground leading-relaxed">{artworkData.story}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="inspiration" className="mt-8">
-              <Card className="border-secondary/20 shadow-lg">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-secondary">
-                    <Eye className="w-5 h-5" />
-                    Creative Inspiration
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground leading-relaxed text-lg">{artworkData.inspiration}</p>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="technique" className="mt-8">
-              <Card className="border-primary/20 shadow-lg">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-primary">
-                    <Brush className="w-5 h-5" />
-                    Artistic Technique
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground leading-relaxed text-lg">{artworkData.technique}</p>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="emotion" className="mt-8">
-              <Card className="border-secondary/20 shadow-lg">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-secondary">
-                    <Heart className="w-5 h-5" />
-                    Emotional Resonance
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <p className="text-muted-foreground leading-relaxed text-lg">This artwork evokes feelings of:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {artworkData.emotion.split(", ").map((emotion, index) => (
-                        <Badge key={index} variant="outline" className="border-secondary/30 text-secondary px-3 py-1">
-                          {emotion}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </div>
+        
       </div>
     </div>
   )
