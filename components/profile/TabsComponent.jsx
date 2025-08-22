@@ -1,5 +1,5 @@
 "use client";
-
+import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -7,13 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Eye, Heart, MessageCircle, ShoppingCart, Tag } from "lucide-react";
 import StoryDialog from "./StoryDialog";
 import ProductUploadDialog from "../uploads/productUpload";
+import UploadStoryDialog from "../uploads/storyUpload";
 import { Plus } from "lucide-react";
 
-function TabsComponent({ stories = [], products = [] }) {
+function TabsComponent({ stories = [], products = [], artistId }) {
     const [selectedStory, setSelectedStory] = useState(null);
     const [storyDialogOpen, setStoryDialogOpen] = useState(false);
     const [productUpploadOpen, setProductUploadOpen] = useState(false);
-
+    const [storyUploadOpen, setStoryUploadOpen] = useState(false);
+    const { user } = useUser();
     const handleStoryClick = (story) => {
         setSelectedStory(story);
         setStoryDialogOpen(true);
@@ -49,11 +51,13 @@ function TabsComponent({ stories = [], products = [] }) {
                             <p className="text-accent-foreground mb-2">
                                 This artist hasn't uploaded any artworks yet.
                             </p>
-                            <ProductUploadDialog
-                                open={productUpploadOpen}
-                                onClose={setProductUploadOpen}
-                                showTrigger={true}
-                            ></ProductUploadDialog>
+                            {artistId === user.id && (
+                                <ProductUploadDialog
+                                    open={productUpploadOpen}
+                                    onClose={setProductUploadOpen}
+                                    showTrigger={true}
+                                ></ProductUploadDialog>
+                            )}
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
@@ -153,18 +157,24 @@ function TabsComponent({ stories = [], products = [] }) {
                                     </div>
                                 </div>
                             ))}
-                            <button
-                                onClick={() => setProductUploadOpen(true)}
-                                className="group bg-card rounded-xl flex flex-col gap-3 items-center justify-center shadow-sm border border-border border-dashed overflow-hidden hover:shadow-lg transition-all h- duration-200"
-                            >
-                                <Plus className="w-24 h-24"></Plus>
-                                Add ArtWork
-                            </button>
+                            {artistId === user.id && (
+                                <button
+                                    onClick={() => setProductUploadOpen(true)}
+                                    className="group bg-card rounded-xl flex flex-col gap-3 items-center justify-center shadow-sm border border-border border-dashed overflow-hidden hover:shadow-lg transition-all h- duration-200"
+                                >
+                                    <Plus className="w-24 h-24"></Plus>
+                                    Add ArtWork
+                                </button>
+                            )}
                         </div>
                     )}
                 </TabsContent>
 
                 <TabsContent value="stories" className="mt-6">
+                    <UploadStoryDialog
+                        open={storyUploadOpen}
+                        onClose={setStoryUploadOpen}
+                    ></UploadStoryDialog>
                     {stories.length === 0 ? (
                         <div className="text-center py-12">
                             <Tag className="w-16 h-16 text-gray-300 mx-auto mb-4" />
@@ -240,6 +250,15 @@ function TabsComponent({ stories = [], products = [] }) {
                                     </div>
                                 </div>
                             ))}
+                            {artistId === user.id && (
+                                <button
+                                    onClick={() => setStoryUploadOpen(true)}
+                                    className="group bg-card rounded-xl flex flex-col gap-3 items-center justify-center shadow-sm border border-border border-dashed overflow-hidden hover:shadow-lg transition-all h- duration-200"
+                                >
+                                    <Plus className="w-24 h-24"></Plus>
+                                    Add Story
+                                </button>
+                            )}
                         </div>
                     )}
                 </TabsContent>
