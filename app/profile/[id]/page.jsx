@@ -15,7 +15,7 @@ const UserPage = ({ params }) => {
         const fetchUserData = async () => {
             try {
                 setLoading(true);
-                
+
                 const userRes = await fetch(`/api/users/${id}`);
                 if (!userRes.ok) {
                     if (userRes.status === 404) {
@@ -28,15 +28,17 @@ const UserPage = ({ params }) => {
                 const userData = await userRes.json();
                 setArtist(userData);
 
-                // Fetch user's stories
-                const storiesRes = await fetch(`/api/stories?author=${userData.id}`);
+                const storiesRes = await fetch(
+                    `/api/stories?author=${userData.id}`
+                );
                 if (storiesRes.ok) {
                     const storiesData = await storiesRes.json();
                     setStories(storiesData);
                 }
 
-                // Fetch user's products
-                const productsRes = await fetch(`/api/products?artist=${userData.id}`);
+                const productsRes = await fetch(
+                    `/api/products?artist=${userData.id}`
+                );
                 if (productsRes.ok) {
                     const productsData = await productsRes.json();
                     setProducts(productsData);
@@ -58,8 +60,8 @@ const UserPage = ({ params }) => {
         <div className="flex flex-col gap-4">
             <UserInfo id={id} artist={artist} />
             <div className="sticky top-80">
-                <TabsComponent 
-                    stories={stories} 
+                <TabsComponent
+                    stories={stories}
                     products={products}
                     artistId={artist?.id}
                 />

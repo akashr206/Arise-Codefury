@@ -7,6 +7,8 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,17 +19,40 @@ import {
     X,
     Play,
     Pause,
+    ShoppingCart,
+    ExternalLink,
 } from "lucide-react";
 
 export default function StoryDialog({ story, open, onOpenChange }) {
     const [isLiked, setIsLiked] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [linkedProducts, setLinkedProducts] = useState([]);
 
     useEffect(() => {
         if (open && story) {
             setIsPlaying(true);
+            if (story.products && story.products.length > 0) {
+                fetchLinkedProducts();
+            }
         }
     }, [open, story]);
+
+    const fetchLinkedProducts = async () => {
+        try {
+            const productPromises = story.products.map(async (productId) => {
+                const response = await fetch(`/api/products/${productId}`);
+                if (response.ok) {
+                    return await response.json();
+                }
+                return null;
+            });
+
+            const products = await Promise.all(productPromises);
+            setLinkedProducts(products.filter(Boolean));
+        } catch (error) {
+            console.error("Error fetching linked products:", error);
+        }
+    };
 
     if (!story) return null;
 
@@ -50,20 +75,31 @@ export default function StoryDialog({ story, open, onOpenChange }) {
         setIsPlaying(!isPlaying);
     };
 
+    const handleProductClick = (product) => {
+        // TODO: Navigate to product page or open product modal
+        console.log("Product clicked:", product);
+    };
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden p-0 bg-black">
+            <DialogContent className="max-w-4xl max-h-[90vh] mt-10 overflow-hidden p-0 bg-black">
                 <DialogHeader className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-b from-black/50 to-transparent p-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-semibold text-lg">
-                                    {story.authorName
-                                        ? story.authorName
-                                              .charAt(0)
-                                              .toUpperCase()
-                                        : "A"}
-                                </div>
+                                <Avatar className="w-10 h-10 border-2 border-white">
+                                    <AvatarImage
+                                        src={story.authorProfile}
+                                        alt={story.authorName}
+                                    />
+                                    <AvatarFallback>
+                                        {story.authorName
+                                            ? story.authorName
+                                                  .charAt(0)
+                                                  .toUpperCase()
+                                            : "A"}
+                                    </AvatarFallback>
+                                </Avatar>
                                 <div>
                                     <p className="text-white font-semibold text-sm">
                                         {story.authorName || "Anonymous Artist"}
@@ -133,6 +169,7 @@ export default function StoryDialog({ story, open, onOpenChange }) {
                             </p>
                         )}
 
+                        {/* Tags */}
                         {story.tags && story.tags.length > 0 && (
                             <div className="flex flex-wrap gap-2 mb-4">
                                 {story.tags.map((tag, index) => (
@@ -147,21 +184,58 @@ export default function StoryDialog({ story, open, onOpenChange }) {
                             </div>
                         )}
 
-                        {/* Linked Products */}
-                        {story.products && story.products.length > 0 && (
+                        {linkedProducts.length > 0 && (
                             <div className="mb-4">
-                                <p className="text-white/80 text-sm mb-2">
-                                    Linked Products:
+                                <p className="text-white/90 text-sm font-medium mb-3">
+                                    🛍️ Products in this story
                                 </p>
-                                <div className="flex gap-2">
-                                    {story.products.map((productId, index) => (
-                                        <Badge
-                                            key={index}
-                                            variant="secondary"
-                                            className="bg-blue-500/20 text-blue-200 border-blue-400/30 hover:bg-blue-400/30"
+                                <div className="flex gap-3 overflow-x-auto pb-2">
+                                    {linkedProducts.map((product) => (
+                                        <div
+                                            key={product._id}
+                                            className="flex-shrink-0 bg-white/10 backdrop-blur-sm rounded-lg p-3 min-w-[200px] border border-white/20 hover:bg-white/20 transition-colors duration-200 cursor-pointer"
+                                            onClick={() =>
+                                                handleProductClick(product)
+                                            }
                                         >
-                                            Product {index + 1}
-                                        </Badge>
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-12 h-12 rounded-lg overflow-hidden bg-white/20">
+                                                    <img
+                                                        src={
+                                                            product
+                                                                .images?.[0] ||
+                                                            "/placeholder.svg"
+                                                        }
+                                                        alt={product.title}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-white font-medium text-sm truncate">
+                                                        {product.title}
+                                                    </p>
+                                                    <p className="text-white/70 text-xs truncate">
+                                                        ₹
+                                                        {product.price?.toLocaleString()}
+                                                    </p>
+                                                    {product.medium && (
+                                                        <Badge
+                                                            variant="secondary"
+                                                            className="mt-1 text-xs bg-white/20 text-white border-white/30"
+                                                        >
+                                                            {product.medium}
+                                                        </Badge>
+                                                    )}
+                                                </div>
+                                                <Button
+                                                    size="sm"
+                                                    variant="ghost"
+                                                    className="text-white hover:bg-white/20 p-1"
+                                                >
+                                                    <ExternalLink className="w-4 h-4" />
+                                                </Button>
+                                            </div>
+                                        </div>
                                     ))}
                                 </div>
                             </div>

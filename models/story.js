@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-
+ 
 const StorySchema = new Schema(
     {
         author: { type: String, required: true },

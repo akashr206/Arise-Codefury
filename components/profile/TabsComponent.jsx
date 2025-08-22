@@ -6,10 +6,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye, Heart, MessageCircle, ShoppingCart, Tag } from "lucide-react";
 import StoryDialog from "./StoryDialog";
+import ProductUploadDialog from "../uploads/productUpload";
+import { Plus } from "lucide-react";
 
 function TabsComponent({ stories = [], products = [] }) {
     const [selectedStory, setSelectedStory] = useState(null);
     const [storyDialogOpen, setStoryDialogOpen] = useState(false);
+    const [productUpploadOpen, setProductUploadOpen] = useState(false);
 
     const handleStoryClick = (story) => {
         setSelectedStory(story);
@@ -32,7 +35,10 @@ function TabsComponent({ stories = [], products = [] }) {
                         Stories ({stories.length})
                     </TabsTrigger>
                 </TabsList>
-
+                <ProductUploadDialog
+                    open={productUpploadOpen}
+                    onClose={setProductUploadOpen}
+                ></ProductUploadDialog>
                 <TabsContent value="artworks" className="mt-6">
                     {products.length === 0 ? (
                         <div className="text-center py-12">
@@ -40,16 +46,21 @@ function TabsComponent({ stories = [], products = [] }) {
                             <h3 className="text-lg font-medium text-gray-900 mb-2">
                                 No Artworks Yet
                             </h3>
-                            <p className="text-gray-500">
+                            <p className="text-accent-foreground mb-2">
                                 This artist hasn't uploaded any artworks yet.
                             </p>
+                            <ProductUploadDialog
+                                open={productUpploadOpen}
+                                onClose={setProductUploadOpen}
+                                showTrigger={true}
+                            ></ProductUploadDialog>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
                             {products.map((product) => (
                                 <div
                                     key={product._id}
-                                    className="group bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-200"
+                                    className="group bg-card rounded-xl shadow-sm border border-border overflow-hidden hover:shadow-lg transition-all duration-200"
                                 >
                                     <div className="relative aspect-square overflow-hidden">
                                         <img
@@ -66,7 +77,6 @@ function TabsComponent({ stories = [], products = [] }) {
                                             <Button
                                                 size="sm"
                                                 variant="secondary"
-                                                className="bg-white/90 hover:bg-white text-gray-900"
                                             >
                                                 <Eye className="w-4 h-4" />
                                             </Button>
@@ -74,15 +84,14 @@ function TabsComponent({ stories = [], products = [] }) {
                                     </div>
 
                                     <div className="p-4">
-                                        <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
+                                        <h3 className="font-semibold mb-2 line-clamp-2">
                                             {product.title}
                                         </h3>
 
-                                        <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                                        <p className="text-sm text-accent-foreground mb-3 line-clamp-2">
                                             {product.description}
                                         </p>
 
-                                        
                                         <div className="flex items-center justify-between mb-3">
                                             <span className="text-lg font-bold text-primary">
                                                 ₹
@@ -98,7 +107,6 @@ function TabsComponent({ stories = [], products = [] }) {
                                             )}
                                         </div>
 
-                                        {/* Tags */}
                                         {product.tags &&
                                             product.tags.length > 0 && (
                                                 <div className="flex flex-wrap gap-1 mb-3">
@@ -108,7 +116,7 @@ function TabsComponent({ stories = [], products = [] }) {
                                                             <Badge
                                                                 key={index}
                                                                 variant="secondary"
-                                                                className="text-xs bg-gray-100 text-gray-600"
+                                                                className="text-xs bg-accent text-accent-foreground"
                                                             >
                                                                 #{tag}
                                                             </Badge>
@@ -126,8 +134,6 @@ function TabsComponent({ stories = [], products = [] }) {
                                                     )}
                                                 </div>
                                             )}
-
-                                        {/* Action Buttons */}
                                         <div className="flex gap-2">
                                             <Button
                                                 size="sm"
@@ -147,6 +153,13 @@ function TabsComponent({ stories = [], products = [] }) {
                                     </div>
                                 </div>
                             ))}
+                            <button
+                                onClick={() => setProductUploadOpen(true)}
+                                className="group bg-card rounded-xl flex flex-col gap-3 items-center justify-center shadow-sm border border-border border-dashed overflow-hidden hover:shadow-lg transition-all h- duration-200"
+                            >
+                                <Plus className="w-24 h-24"></Plus>
+                                Add ArtWork
+                            </button>
                         </div>
                     )}
                 </TabsContent>
@@ -164,7 +177,7 @@ function TabsComponent({ stories = [], products = [] }) {
                         </div>
                     ) : (
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 p-4">
-                            {stories.map((story) => (
+                            {stories?.map((story) => (
                                 <div
                                     key={story._id}
                                     className="relative aspect-[9/16] bg-black overflow-hidden rounded-lg cursor-pointer group hover:scale-105 transition-transform duration-200"

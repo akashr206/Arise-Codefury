@@ -1,14 +1,30 @@
 import { NextResponse } from "next/server";
-import { auth, getAuth } from "@clerk/nextjs/server";
+import { getAuth } from "@clerk/nextjs/server";
 import { connectMongoDB } from "@/lib/db";
 import Story from "@/models/story";
+import User from "@/models/user";
 
 export async function GET(req) {
     await connectMongoDB();
     const { searchParams } = new URL(req.url);
     const author = searchParams.get("author");
+
     const query = author ? { author } : {};
-    const stories = await Story.find(query).sort({ createdAt: -1 });
+    let stories = await Story.find(query).sort({ createdAt: -1 }).lean();
+    const authorIds = [...new Set(stories.map((s) => s.author))];
+
+    const authors = await User.find({ id: { $in: authorIds } }).lean();
+    const authorMap = authors.reduce((acc, user) => {
+        acc[user.id] = user;
+        return acc;
+    }, {});
+
+    stories = stories.map((story) => ({
+        ...story,
+        authorName: authorMap[story.author]?.name || "Unknown",
+        authorProfile: authorMap[story.author]?.profile || null,
+    }));
+
     return NextResponse.json(stories);
 }
 

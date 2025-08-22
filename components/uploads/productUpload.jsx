@@ -15,7 +15,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { Upload, X, Image, Plus, Palette } from "lucide-react";
 
-export default function ProductUploadDialog({ open, onClose }) {
+export default function ProductUploadDialog({
+    open,
+    onClose,
+    showTrigger = false,
+}) {
     const [files, setFiles] = useState([]);
     const [previews, setPreviews] = useState([]);
     const [formData, setFormData] = useState({
@@ -161,11 +165,7 @@ export default function ProductUploadDialog({ open, onClose }) {
             return;
         }
 
-        if (
-            !formData.title ||
-            !formData.description ||
-            !formData.price
-        ) {
+        if (!formData.title || !formData.description || !formData.price) {
             alert(
                 "Please fill in all required fields (Title, Description, Price)"
             );
@@ -233,7 +233,9 @@ export default function ProductUploadDialog({ open, onClose }) {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.message || "Failed to create product");
+                throw new Error(
+                    errorData.message || "Failed to create product"
+                );
             }
 
             resetForm();
@@ -272,30 +274,30 @@ export default function ProductUploadDialog({ open, onClose }) {
 
     return (
         <Dialog open={open} onOpenChange={onClose}>
-            <DialogTrigger asChild>
-                <Button className="bg-gray-900 hover:bg-gray-800 text-white border-0 shadow-lg">
-                    <Palette className="w-4 h-4 mr-2" />
-                    Add Artwork
-                </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-4xl bg-white/95 backdrop-blur-sm border-0 shadow-2xl max-h-[85vh] mt-10 overflow-y-auto">
+            {showTrigger && (
+                <DialogTrigger asChild>
+                    <Button variant={"outline"}>
+                        <Palette className="w-4 h-4 mr-2" />
+                        Add Artwork
+                    </Button>
+                </DialogTrigger>
+            )}
+            <DialogContent className="max-w-4xl shadow-2xl max-h-[85vh] mt-10 overflow-y-auto">
                 <DialogHeader className="pb-4">
-                    <DialogTitle className="text-2xl font-bold text-gray-900">
+                    <DialogTitle className="text-2xl font-bold ">
                         Add New Artwork
                     </DialogTitle>
                 </DialogHeader>
 
                 <div className="space-y-6">
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-700">
-                            Images *
-                        </label>
+                        <label className="text-sm font-medium ">Images *</label>
                         {previews.length === 0 ? (
                             <div
                                 className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-200 cursor-pointer ${
                                     dragActive
-                                        ? "border-blue-500 bg-blue-50"
-                                        : "border-gray-300 hover:border-blue-400 hover:bg-gray-50"
+                                        ? "border-blue-500 bg-blue-50 dark:bg-blue-800"
+                                        : "border-gray-300 hover:border-blue-400 hover:bg-accent"
                                 }`}
                                 onDragEnter={handleDrag}
                                 onDragLeave={handleDrag}
@@ -304,14 +306,14 @@ export default function ProductUploadDialog({ open, onClose }) {
                                 onClick={() => fileInputRef.current?.click()}
                             >
                                 <div className="flex flex-col items-center space-y-4">
-                                    <div className="p-3 bg-gray-100 rounded-full">
-                                        <Upload className="w-8 h-8 text-gray-600" />
+                                    <div className="p-3  rounded-full">
+                                        <Upload className="w-8 h-8 " />
                                     </div>
                                     <div>
-                                        <p className="text-lg font-medium text-gray-900">
+                                        <p className="text-lg font-medium ">
                                             Drop your images here
                                         </p>
-                                        <p className="text-sm text-gray-500 mt-1">
+                                        <p className="text-sm mt-1">
                                             or click to browse • Multiple images
                                             supported
                                         </p>
@@ -334,7 +336,7 @@ export default function ProductUploadDialog({ open, onClose }) {
                                     {previews.map((preview, index) => (
                                         <div
                                             key={index}
-                                            className="relative rounded-lg overflow-hidden bg-gray-100"
+                                            className="relative rounded-lg overflow-hidden"
                                         >
                                             <img
                                                 src={preview}
@@ -347,7 +349,7 @@ export default function ProductUploadDialog({ open, onClose }) {
                                                 }
                                                 className="absolute top-2 right-2 p-1 bg-red-500 hover:bg-red-600 rounded-full transition-colors"
                                             >
-                                                <X className="w-3 h-3 text-white" />
+                                                <X className="w-3 h-3 " />
                                             </button>
                                         </div>
                                     ))}
@@ -380,7 +382,7 @@ export default function ProductUploadDialog({ open, onClose }) {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-700">
+                            <label className="text-sm font-medium ">
                                 Title *
                             </label>
                             <Input
@@ -389,12 +391,12 @@ export default function ProductUploadDialog({ open, onClose }) {
                                 onChange={(e) =>
                                     handleInputChange("title", e.target.value)
                                 }
-                                className="border-gray-200 focus:border-blue-400 focus:ring-blue-400"
+                                className=" focus:border-blue-400 focus:ring-blue-400"
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-700">
+                            <label className="text-sm font-medium ">
                                 Price * (₹)
                             </label>
                             <Input
@@ -406,13 +408,13 @@ export default function ProductUploadDialog({ open, onClose }) {
                                 onChange={(e) =>
                                     handleInputChange("price", e.target.value)
                                 }
-                                className="border-gray-200 focus:border-blue-400 focus:ring-blue-400"
+                                className=" focus:border-blue-400 focus:ring-blue-400"
                             />
                         </div>
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-700">
+                        <label className="text-sm font-medium ">
                             Description *
                         </label>
                         <Textarea
@@ -421,14 +423,13 @@ export default function ProductUploadDialog({ open, onClose }) {
                             onChange={(e) =>
                                 handleInputChange("description", e.target.value)
                             }
-                            className="min-h-20 resize-none border-gray-200 focus:border-blue-400 focus:ring-blue-400 rounded-lg"
+                            className="min-h-20 resize-none  focus:border-blue-400 focus:ring-blue-400 rounded-lg"
                         />
                     </div>
 
-
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-700">
+                            <label className="text-sm font-medium ">
                                 Medium
                             </label>
                             <Input
@@ -437,14 +438,12 @@ export default function ProductUploadDialog({ open, onClose }) {
                                 onChange={(e) =>
                                     handleInputChange("medium", e.target.value)
                                 }
-                                className="border-gray-200 focus:border-blue-400 focus:ring-blue-400"
+                                className=" focus:border-blue-400 focus:ring-blue-400"
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-700">
-                                Year
-                            </label>
+                            <label className="text-sm font-medium ">Year</label>
                             <Input
                                 type="number"
                                 min="0"
@@ -453,12 +452,12 @@ export default function ProductUploadDialog({ open, onClose }) {
                                 onChange={(e) =>
                                     handleInputChange("year", e.target.value)
                                 }
-                                className="border-gray-200 focus:border-blue-400 focus:ring-blue-400"
+                                className=" focus:border-blue-400 focus:ring-blue-400"
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-700">
+                            <label className="text-sm font-medium ">
                                 Category
                             </label>
                             <Input
@@ -470,13 +469,13 @@ export default function ProductUploadDialog({ open, onClose }) {
                                         e.target.value
                                     )
                                 }
-                                className="border-gray-200 focus:border-blue-400 focus:ring-blue-400"
+                                className=" focus:border-blue-400 focus:ring-blue-400"
                             />
                         </div>
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-700">
+                        <label className="text-sm font-medium ">
                             Dimensions
                         </label>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -492,7 +491,7 @@ export default function ProductUploadDialog({ open, onClose }) {
                                         e.target.value
                                     )
                                 }
-                                className="border-gray-200 focus:border-blue-400 focus:ring-blue-400"
+                                className=" focus:border-blue-400 focus:ring-blue-400"
                             />
                             <Input
                                 type="number"
@@ -506,7 +505,7 @@ export default function ProductUploadDialog({ open, onClose }) {
                                         e.target.value
                                     )
                                 }
-                                className="border-gray-200 focus:border-blue-400 focus:ring-blue-400"
+                                className=" focus:border-blue-400 focus:ring-blue-400"
                             />
                             <Input
                                 type="number"
@@ -520,7 +519,7 @@ export default function ProductUploadDialog({ open, onClose }) {
                                         e.target.value
                                     )
                                 }
-                                className="border-gray-200 focus:border-blue-400 focus:ring-blue-400"
+                                className=" focus:border-blue-400 focus:ring-blue-400"
                             />
                             <select
                                 value={formData.dimensions.unit}
@@ -530,7 +529,7 @@ export default function ProductUploadDialog({ open, onClose }) {
                                         e.target.value
                                     )
                                 }
-                                className="px-3 py-2 border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-400 focus:outline-none"
+                                className="px-3 py-2 border  rounded-md focus:border-blue-400 focus:ring-blue-400 focus:outline-none"
                             >
                                 <option value="cm">cm</option>
                                 <option value="in">in</option>
@@ -541,7 +540,7 @@ export default function ProductUploadDialog({ open, onClose }) {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-700">
+                            <label className="text-sm font-medium ">
                                 Location
                             </label>
                             <Input
@@ -553,12 +552,12 @@ export default function ProductUploadDialog({ open, onClose }) {
                                         e.target.value
                                     )
                                 }
-                                className="border-gray-200 focus:border-blue-400 focus:ring-blue-400"
+                                className=" focus:border-blue-400 focus:ring-blue-400"
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-700">
+                            <label className="text-sm font-medium ">
                                 Framing
                             </label>
                             <div className="flex items-center space-x-2 pt-2">
@@ -574,10 +573,7 @@ export default function ProductUploadDialog({ open, onClose }) {
                                     }
                                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                 />
-                                <label
-                                    htmlFor="isFramed"
-                                    className="text-sm text-gray-700"
-                                >
+                                <label htmlFor="isFramed" className="text-sm ">
                                     This artwork is framed
                                 </label>
                             </div>
@@ -585,14 +581,12 @@ export default function ProductUploadDialog({ open, onClose }) {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-700">
-                            Tags
-                        </label>
-                        <div className="flex flex-wrap gap-2 p-3 border border-gray-200 rounded-lg min-h-12 focus-within:border-blue-400">
+                        <label className="text-sm font-medium ">Tags</label>
+                        <div className="flex flex-wrap gap-2 p-3 border  rounded-lg min-h-12 focus-within:border-blue-400">
                             {tags.map((tag, index) => (
                                 <span
                                     key={index}
-                                    className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200"
+                                    className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 border "
                                 >
                                     #{tag}
                                     <button
@@ -612,7 +606,7 @@ export default function ProductUploadDialog({ open, onClose }) {
                                 onChange={(e) => setTagInput(e.target.value)}
                                 onKeyDown={handleKeyPress}
                                 onBlur={addTag}
-                                className="flex-1 min-w-20 bg-transparent outline-none text-sm placeholder-gray-400"
+                                className="flex-1 min-w-20 bg-transparent outline-none text-sm "
                             />
                         </div>
                         <p className="text-xs text-gray-400">
@@ -631,15 +625,12 @@ export default function ProductUploadDialog({ open, onClose }) {
                                     {Math.round(progress)}%
                                 </span>
                             </div>
-                            <Progress
-                                value={progress}
-                                className="h-2 bg-gray-100"
-                            />
+                            <Progress value={progress} className="h-2" />
                         </div>
                     )}
                 </div>
 
-                <DialogFooter className="pt-6 border-t border-gray-100">
+                <DialogFooter className="pt-6 border-t border-accent-foreground">
                     <Button
                         variant="outline"
                         onClick={() => {
@@ -647,7 +638,6 @@ export default function ProductUploadDialog({ open, onClose }) {
                             onClose();
                         }}
                         disabled={uploading}
-                        className="border-gray-200 hover:bg-gray-50"
                     >
                         Cancel
                     </Button>
