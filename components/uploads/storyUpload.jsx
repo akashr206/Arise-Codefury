@@ -221,14 +221,14 @@ export default function UploadStoryDialog({ open, onClose }) {
                     Create Story
                 </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl bg-white/95 backdrop-blur-sm border-0 shadow-2xl">
-                <DialogHeader className="pb-4">
+            <DialogContent className="max-w-2xl mt-10 px-0 bg-white/95 backdrop-blur-sm border-0 shadow-2xl">
+                <DialogHeader className="pb-4 px-6">
                     <DialogTitle className="text-2xl font-bold text-gray-900">
                         Create Your Story
                     </DialogTitle>
                 </DialogHeader>
 
-                <div className="space-y-6">
+                <div className="space-y-6 px-6 max-h-[500px] overflow-y-auto">
                     <div className="relative">
                         {!preview ? (
                             <div
@@ -302,7 +302,7 @@ export default function UploadStoryDialog({ open, onClose }) {
                         )}
                     </div>
 
-                    <div className="space-y-2">
+                    <div className="space-y-2 ">
                         <label className="text-sm font-medium text-gray-700">
                             Caption
                         </label>
@@ -438,7 +438,7 @@ export default function UploadStoryDialog({ open, onClose }) {
                     )}
                 </div>
 
-                <DialogFooter className="pt-6 border-t border-gray-100">
+                <DialogFooter className="pt-6 border-t px-6 border-gray-100">
                     <Button
                         variant="outline"
                         onClick={() => {

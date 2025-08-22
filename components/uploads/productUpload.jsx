@@ -278,7 +278,7 @@ export default function ProductUploadDialog({ open, onClose }) {
                     Add Artwork
                 </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-4xl bg-white/95 backdrop-blur-sm border-0 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="max-w-4xl bg-white/95 backdrop-blur-sm border-0 shadow-2xl max-h-[85vh] mt-10 overflow-y-auto">
                 <DialogHeader className="pb-4">
                     <DialogTitle className="text-2xl font-bold text-gray-900">
                         Add New Artwork
