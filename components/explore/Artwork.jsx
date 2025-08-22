@@ -24,7 +24,31 @@ import {
 
 export default function Artwork({ artwork, onBack }) {
   const [isLoved, setIsLoved] = useState(false)
-  const [viewCount] = useState(Math.floor(Math.random() * 100) + 50)
+  const [viewCount] = useState(127) // Static additional views instead of random
+  const [isZooming, setIsZooming] = useState(false)
+  const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 })
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+
+  const handleMouseEnter = () => {
+    setIsZooming(true)
+  }
+
+  const handleMouseLeave = () => {
+    setIsZooming(false)
+  }
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = ((e.clientX - rect.left) / rect.width) * 100
+    const y = ((e.clientY - rect.top) / rect.height) * 100
+
+    setZoomPosition({ x, y })
+    setMousePosition({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    })
+  }
 
   const convertFeedToArtwork = (feed) => {
     if (!feed) return null
@@ -36,12 +60,17 @@ export default function Artwork({ artwork, onBack }) {
         name: feed.author || "Anonymous Artist",
         avatar: "/artist-portrait.png",
         rating: 4.9,
-        followers: Math.floor(Math.random() * 5000) + 1000,
+        followers: 2847, // Fixed static value instead of random
         location: "Creative Studio",
         verified: true,
         bio: "Passionate artist exploring the boundaries of creativity and emotion through visual storytelling.",
       },
-      images: [feed.mediaUrl],
+      images: [
+        feed.mediaUrl,
+        "/sunset-mountain-painting-detail.png",
+        "/sunset-mountain-painting-frame.png",
+        "/sunset-mountain-painting-studio.png",
+      ],
       medium: "Digital Art",
       dimensions: "Infinite × Boundless",
       year: 2024,
@@ -56,8 +85,8 @@ export default function Artwork({ artwork, onBack }) {
         "Created using innovative digital techniques combined with traditional artistic principles, resulting in a harmonious blend of old and new.",
       emotion: "Joy, Wonder, Contemplation",
       tags: feed.tags || ["art", "creativity", "expression"],
-      views: Math.floor(Math.random() * 10000) + 500,
-      loves: Math.floor(Math.random() * 500) + 50,
+      views: 6234, // Fixed static value instead of random
+      loves: 189, // Fixed static value instead of random
     }
   }
 
@@ -73,7 +102,12 @@ export default function Artwork({ artwork, onBack }) {
       verified: true,
       bio: "Capturing the poetry of light and the symphony of colors that dance in everyday moments.",
     },
-    images: ["/sunset-mountain-painting.png"],
+    images: [
+      "/sunset-mountain-painting.png",
+      "/sunset-mountain-painting-detail.png",
+      "/sunset-mountain-painting-frame.png",
+      "/sunset-mountain-painting-studio.png",
+    ],
     medium: "Oil & Dreams",
     dimensions: "24 × 36 inches of pure emotion",
     year: 2024,
@@ -114,18 +148,81 @@ export default function Artwork({ artwork, onBack }) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div className="space-y-6">
             <div className="relative group">
-              <div className="aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-primary/5 to-secondary/5 shadow-2xl hover:shadow-primary/20 transition-all duration-500 float-animation">
+              <div
+                className="aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-primary/5 to-secondary/5 shadow-2xl hover:shadow-primary/20 transition-all duration-500 float-animation cursor-zoom-in"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                onMouseMove={handleMouseMove}
+              >
                 <img
-                  src={artworkData.images[0] || "/placeholder.svg"}
+                  src={artworkData.images[selectedImageIndex] || "/placeholder.svg"}
                   alt={artworkData.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                {isZooming && (
+                  <div
+                    className="absolute w-32 h-32 border-2 border-primary/60 rounded-full pointer-events-none bg-white/10 backdrop-blur-sm shadow-lg"
+                    style={{
+                      left: mousePosition.x - 64,
+                      top: mousePosition.y - 64,
+                      transform: "translate(0, 0)",
+                    }}
+                  />
+                )}
               </div>
+
+              {isZooming && (
+                <div className="absolute top-0 left-full ml-4 w-64 h-64 bg-white rounded-2xl shadow-2xl border-2 border-primary/20 overflow-hidden z-10 animate-in fade-in-0 zoom-in-95 duration-200">
+                  <div
+                    className="w-full h-full bg-cover bg-no-repeat"
+                    style={{
+                      backgroundImage: `url(${artworkData.images[selectedImageIndex] || "/placeholder.svg"})`,
+                      backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`,
+                      backgroundSize: "600%", // Increased zoom level from 300% to 600% for more detailed view
+                    }}
+                  />
+                  <div className="absolute inset-0 border border-primary/30 rounded-2xl" />
+                  <div className="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                    Zoom View
+                  </div>
+                </div>
+              )}
+
               <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-2 shadow-lg">
                 <Eye className="w-4 h-4 text-secondary" />
                 <span className="text-sm font-medium">{artworkData.views + viewCount}</span>
               </div>
+            </div>
+
+            <div className="grid grid-cols-4 gap-3">
+              {artworkData.images.map((image, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedImageIndex(index)}
+                  className={`aspect-square rounded-xl overflow-hidden border-2 transition-all duration-300 hover:scale-105 ${
+                    selectedImageIndex === index
+                      ? "border-primary shadow-lg shadow-primary/20"
+                      : "border-transparent hover:border-primary/50"
+                  }`}
+                >
+                  <img
+                    src={image || "/placeholder.svg"}
+                    alt={`${artworkData.title} view ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+
+            <div className="text-center">
+              <p className="text-sm text-muted-foreground">
+                {selectedImageIndex === 0 && "Main View"}
+                {selectedImageIndex === 1 && "Detail Close-up"}
+                {selectedImageIndex === 2 && "Framed Display"}
+                {selectedImageIndex === 3 && "Studio Setting"}
+              </p>
             </div>
           </div>
 
