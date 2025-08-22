@@ -8,11 +8,11 @@ import {
     DialogTitle,
     DialogFooter,
     DialogTrigger,
-} from "@/app/components/ui/dialog";
-import { Button } from "@/app/components/ui/button";
-import { Input } from "@/app/components/ui/input";
-import { Textarea } from "@/app/components/ui/textarea";
-import { Progress } from "@/app/components/ui/progress";
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Progress } from "@/components/ui/progress";
 import { Upload, X, Image, Plus, Palette } from "lucide-react";
 
 export default function ProductUploadDialog({ open, onClose }) {

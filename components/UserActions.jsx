@@ -6,7 +6,7 @@ import {
     SignedOut,
     ClerkLoaded,
 } from "@clerk/nextjs";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import { dark, base } from "@clerk/themes";
 const UserActions = () => {

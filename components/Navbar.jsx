@@ -1,10 +1,10 @@
 "use client";
-import ThemeToggle from "./ThemeToggle";
+import ThemeToggle from "@/components/ThemeToggle";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
-import UserActions from "./UserActions";
+import UserActions from "@/components/UserActions";
 
 const Navbar = () => {
     const navs = [
@@ -43,7 +43,11 @@ const Navbar = () => {
             >
                 <div className="w-full  flex justify-between items-center">
                     <Link href={"/"} className="overflow-hidden rounded-md">
-                        <img src="/logo.png" alt="logo" className="h-10 w-auto" />
+                        <img
+                            src="/logo.png"
+                            alt="logo"
+                            className="h-10 w-auto"
+                        />
                     </Link>
                     <nav>
                         <ul className="flex gap-5 max-md:hidden">
