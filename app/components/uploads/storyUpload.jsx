@@ -105,9 +105,9 @@ export default function UploadStoryDialog({ open, onClose }) {
     };
 
     const toggleProduct = (productId) => {
-        setSelectedProducts(prev => 
-            prev.includes(productId) 
-                ? prev.filter(id => id !== productId)
+        setSelectedProducts((prev) =>
+            prev.includes(productId)
+                ? prev.filter((id) => id !== productId)
                 : [...prev, productId]
         );
     };
@@ -185,6 +185,7 @@ export default function UploadStoryDialog({ open, onClose }) {
                     mediaType,
                     products: selectedProducts,
                 }),
+                credentials: "include",
             });
 
             setFile(null);
@@ -360,7 +361,9 @@ export default function UploadStoryDialog({ open, onClose }) {
                         {loadingProducts ? (
                             <div className="flex items-center justify-center p-4 border border-gray-200 rounded-lg">
                                 <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
-                                <span className="ml-2 text-sm text-gray-500">Loading products...</span>
+                                <span className="ml-2 text-sm text-gray-500">
+                                    Loading products...
+                                </span>
                             </div>
                         ) : availableProducts.length > 0 ? (
                             <div className="max-h-32 overflow-y-auto border border-gray-200 rounded-lg p-2">
@@ -368,16 +371,24 @@ export default function UploadStoryDialog({ open, onClose }) {
                                     <div
                                         key={product._id}
                                         className={`flex items-center p-2 rounded cursor-pointer transition-colors ${
-                                            selectedProducts.includes(product._id)
+                                            selectedProducts.includes(
+                                                product._id
+                                            )
                                                 ? "bg-blue-50 border border-blue-200"
                                                 : "hover:bg-gray-50"
                                         }`}
-                                        onClick={() => toggleProduct(product._id)}
+                                        onClick={() =>
+                                            toggleProduct(product._id)
+                                        }
                                     >
                                         <input
                                             type="checkbox"
-                                            checked={selectedProducts.includes(product._id)}
-                                            onChange={() => toggleProduct(product._id)}
+                                            checked={selectedProducts.includes(
+                                                product._id
+                                            )}
+                                            onChange={() =>
+                                                toggleProduct(product._id)
+                                            }
                                             className="mr-3"
                                         />
                                         <div className="flex-1 min-w-0">
@@ -385,7 +396,8 @@ export default function UploadStoryDialog({ open, onClose }) {
                                                 {product.title}
                                             </p>
                                             <p className="text-xs text-gray-500">
-                                                ${product.price} • {product.medium || "Art"}
+                                                ${product.price} •{" "}
+                                                {product.medium || "Art"}
                                             </p>
                                         </div>
                                     </div>
@@ -394,13 +406,16 @@ export default function UploadStoryDialog({ open, onClose }) {
                         ) : (
                             <div className="p-4 text-center border border-gray-200 rounded-lg">
                                 <p className="text-sm text-gray-500">
-                                    No products found. Create products first to link them to your story.
+                                    No products found. Create products first to
+                                    link them to your story.
                                 </p>
                             </div>
                         )}
                         {selectedProducts.length > 0 && (
                             <p className="text-xs text-blue-600">
-                                {selectedProducts.length} product{selectedProducts.length !== 1 ? 's' : ''} selected
+                                {selectedProducts.length} product
+                                {selectedProducts.length !== 1 ? "s" : ""}{" "}
+                                selected
                             </p>
                         )}
                     </div>

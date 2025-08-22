@@ -22,8 +22,6 @@ export default function ProductUploadDialog({ open, onClose }) {
         title: "",
         description: "",
         price: "",
-        artist: "",
-        artistName: "",
         medium: "",
         year: "",
         location: "",
@@ -57,7 +55,6 @@ export default function ProductUploadDialog({ open, onClose }) {
 
         setFiles(validFiles);
 
-        // Create previews
         const newPreviews = [];
         validFiles.forEach((file) => {
             const reader = new FileReader();
@@ -167,11 +164,10 @@ export default function ProductUploadDialog({ open, onClose }) {
         if (
             !formData.title ||
             !formData.description ||
-            !formData.price ||
-            !formData.artist
+            !formData.price
         ) {
             alert(
-                "Please fill in all required fields (Title, Description, Price, Artist)"
+                "Please fill in all required fields (Title, Description, Price)"
             );
             return;
         }
@@ -180,7 +176,6 @@ export default function ProductUploadDialog({ open, onClose }) {
         const progressInterval = simulateProgress();
 
         try {
-            // Upload images to Cloudinary
             const imageUrls = [];
             for (const file of files) {
                 const formDataUpload = new FormData();
@@ -190,7 +185,7 @@ export default function ProductUploadDialog({ open, onClose }) {
                     process.env.NEXT_PUBLIC_CLOUDINARY_PRESET
                 );
 
-                const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME;
+                const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
                 const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
 
                 const res = await fetch(uploadUrl, {
@@ -210,7 +205,6 @@ export default function ProductUploadDialog({ open, onClose }) {
             clearInterval(progressInterval);
             setProgress(100);
 
-            // Prepare product data
             const productData = {
                 ...formData,
                 images: imageUrls,
@@ -231,14 +225,17 @@ export default function ProductUploadDialog({ open, onClose }) {
                 },
             };
 
-            // Send product to backend
-            await fetch("/api/products", {
+            const response = await fetch("/api/products", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(productData),
             });
 
-            // Reset form
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Failed to create product");
+            }
+
             resetForm();
             onClose();
         } catch (error) {
@@ -256,8 +253,6 @@ export default function ProductUploadDialog({ open, onClose }) {
             title: "",
             description: "",
             price: "",
-            artist: "",
-            artistName: "",
             medium: "",
             year: "",
             location: "",
@@ -291,7 +286,6 @@ export default function ProductUploadDialog({ open, onClose }) {
                 </DialogHeader>
 
                 <div className="space-y-6">
-                    {/* Image Upload Area */}
                     <div className="space-y-2">
                         <label className="text-sm font-medium text-gray-700">
                             Images *
@@ -384,7 +378,6 @@ export default function ProductUploadDialog({ open, onClose }) {
                         )}
                     </div>
 
-                    {/* Basic Information */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-gray-700">
@@ -402,7 +395,7 @@ export default function ProductUploadDialog({ open, onClose }) {
 
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-gray-700">
-                                Price * ($)
+                                Price * (₹)
                             </label>
                             <Input
                                 type="number"
@@ -418,7 +411,6 @@ export default function ProductUploadDialog({ open, onClose }) {
                         </div>
                     </div>
 
-                    {/* Description */}
                     <div className="space-y-2">
                         <label className="text-sm font-medium text-gray-700">
                             Description *
@@ -433,41 +425,7 @@ export default function ProductUploadDialog({ open, onClose }) {
                         />
                     </div>
 
-                    {/* Artist Information */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-700">
-                                Artist ID *
-                            </label>
-                            <Input
-                                placeholder="Artist identifier"
-                                value={formData.artist}
-                                onChange={(e) =>
-                                    handleInputChange("artist", e.target.value)
-                                }
-                                className="border-gray-200 focus:border-blue-400 focus:ring-blue-400"
-                            />
-                        </div>
 
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-700">
-                                Artist Name
-                            </label>
-                            <Input
-                                placeholder="Artist display name"
-                                value={formData.artistName}
-                                onChange={(e) =>
-                                    handleInputChange(
-                                        "artistName",
-                                        e.target.value
-                                    )
-                                }
-                                className="border-gray-200 focus:border-blue-400 focus:ring-blue-400"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Artwork Details */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-gray-700">
@@ -517,7 +475,6 @@ export default function ProductUploadDialog({ open, onClose }) {
                         </div>
                     </div>
 
-                    {/* Dimensions */}
                     <div className="space-y-2">
                         <label className="text-sm font-medium text-gray-700">
                             Dimensions
@@ -582,7 +539,6 @@ export default function ProductUploadDialog({ open, onClose }) {
                         </div>
                     </div>
 
-                    {/* Location and Frame */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-gray-700">
@@ -628,7 +584,6 @@ export default function ProductUploadDialog({ open, onClose }) {
                         </div>
                     </div>
 
-                    {/* Tags */}
                     <div className="space-y-2">
                         <label className="text-sm font-medium text-gray-700">
                             Tags
@@ -666,7 +621,6 @@ export default function ProductUploadDialog({ open, onClose }) {
                         </p>
                     </div>
 
-                    {/* Upload Progress */}
                     {uploading && (
                         <div className="space-y-2">
                             <div className="flex items-center justify-between text-sm">
@@ -704,8 +658,7 @@ export default function ProductUploadDialog({ open, onClose }) {
                             uploading ||
                             !formData.title ||
                             !formData.description ||
-                            !formData.price ||
-                            !formData.artist
+                            !formData.price
                         }
                         className="bg-gray-900 hover:bg-gray-800 text-white border-0 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                     >

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth, currentUser, getAuth } from "@clerk/nextjs/server";
 import { connectMongoDB } from "@/lib/db";
 import Product from "@/models/product";
 
@@ -16,11 +16,16 @@ export async function GET(req) {
 }
 
 export async function POST(req) {
-    const { userId } = auth();
-    if (!userId) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    const { userId } = getAuth(req);
+    if (!userId)
+        return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
     const user = await currentUser();
-    if (!user) return NextResponse.json({ message: "User not found" }, { status: 404 });
+    if (!user)
+        return NextResponse.json(
+            { message: "User not found" },
+            { status: 404 }
+        );
 
     const body = await req.json();
     await connectMongoDB();
@@ -54,9 +59,12 @@ export async function POST(req) {
     const product = await Product.create({
         ...allowed,
         artist: userId,
-        artistName: user.firstName && user.lastName 
-            ? `${user.firstName} ${user.lastName}` 
-            : user.username || user.emailAddresses[0]?.emailAddress || "Unknown Artist"
+        artistName:
+            user.firstName && user.lastName
+                ? `${user.firstName} ${user.lastName}`
+                : user.username ||
+                  user.emailAddresses[0]?.emailAddress ||
+                  "Unknown Artist",
     });
     return NextResponse.json(product, { status: 201 });
 }

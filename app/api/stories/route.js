@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+import { auth, getAuth } from "@clerk/nextjs/server";
 import { connectMongoDB } from "@/lib/db";
 import Story from "@/models/story";
 
@@ -13,7 +13,9 @@ export async function GET(req) {
 }
 
 export async function POST(req) {
-    const { userId } = auth();
+    const { userId } = getAuth(req);
+    console.log(userId);
+
     if (!userId)
         return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 

@@ -19,5 +19,5 @@ const StorySchema = new Schema(
     }
 );
 
-export default Story =
-    mongoose.models.Story || mongoose.model("Story", StorySchema);
+const Story = mongoose.models.Story || mongoose.model("Story", StorySchema);
+export default Story;
