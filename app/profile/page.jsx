@@ -1,10 +1,16 @@
 "use client";
+
+import UserInfo from "@/components/profile/UserInfo";
+import TabsComponent from "@/components/profile/TabsComponent";
 const page = () => {
-    return (
-        <section className="flex h-screen w-screen items-center justify-center">
-            <p className="text-4xl">Hello world</p>
-        </section>
-    );
+  return (
+    <div className=" absolute flex flex-col gap-4">
+      <UserInfo />
+      <div className="sticky top-80">
+        <TabsComponent />
+      </div>
+    </div>
+  );
 };
 
 export default page;

@@ -28,7 +28,7 @@ const Navbar = () => {
     return (
         <header
             className={cn(
-                "fixed top-0 py-4 bg-background/60 backdrop-blur-lg w-screen px-4 "
+                "fixed top-0 z-999 py-4 bg-background/60 backdrop-blur-2xl w-screen px-4 "
             )}
         >
             <motion.nav
