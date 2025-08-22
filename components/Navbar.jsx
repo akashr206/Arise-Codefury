@@ -8,10 +8,10 @@ import UserActions from "./UserActions";
 
 const Navbar = () => {
     const navs = [
-        { title: "Home", link: "/home" },
-        { title: "Products", link: "/products" },
-        { title: "About", link: "/about" },
-        { title: "Contact", link: "/contact" },
+        { title: "Explore", link: "/explore" },
+        { title: "Stories", link: "/stories" },
+        { title: "Shop", link: "/shop" },
+        { title: "Search", link: "/search" },
     ];
     const [isOpen, setIsOpen] = useState(false);
     const [menuHeight, setMenuHeight] = useState(0);
@@ -38,10 +38,10 @@ const Navbar = () => {
                 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
                 className={cn(
-                    "w-full rounded-xl bg-background h-14  mx-auto  flex flex-col justify-center px-5 border"
+                    "w-full rounded-xl max-w-5xl bg-background h-14 mx-auto flex flex-col justify-center px-5 border"
                 )}
             >
-                <div className="w-full flex justify-between items-center">
+                <div className="w-full  flex justify-between items-center">
                     <div>Logo</div>
                     <nav>
                         <ul className="flex gap-5 max-md:hidden">
