@@ -1,5 +1,3 @@
-import ThemeToggle from "@/app/components/ThemeToggle";
-
 export default function Home() {
     return (
         <div className="bg-background w-screen flex flex-wrap gap-4">
