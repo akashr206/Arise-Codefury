@@ -42,7 +42,9 @@ const Navbar = () => {
                 )}
             >
                 <div className="w-full  flex justify-between items-center">
-                    <div>Logo</div>
+                    <Link href={"/"} className="overflow-hidden rounded-md">
+                        <img src="/logo.png" alt="logo" className="h-10 w-auto" />
+                    </Link>
                     <nav>
                         <ul className="flex gap-5 max-md:hidden">
                             {navs.map((nav, ind) => (

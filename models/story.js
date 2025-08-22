@@ -6,6 +6,7 @@ const StorySchema = new Schema(
         mediaUrl: { type: String, required: true },
         mediaType: { type: String, enum: ["image", "video"], required: true },
         thumbnailUrl: { type: String },
+        products: { type: Array },
         caption: { type: String },
         tags: { type: [String], default: [] },
         durationSec: { type: Number, min: 0 },

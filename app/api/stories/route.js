@@ -25,16 +25,14 @@ export async function POST(req) {
         thumbnailUrl,
         caption,
         tags,
-        durationSec,
-        aspectRatio,
+        products,
     }) => ({
         mediaUrl,
         mediaType,
         thumbnailUrl,
         caption,
         tags,
-        durationSec,
-        aspectRatio,
+        products,
     }))(body);
 
     const story = await Story.create({ ...allowed, author: userId });
