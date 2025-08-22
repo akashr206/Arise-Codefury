@@ -2,6 +2,7 @@
 import { useState } from "react"
 import { Play } from "lucide-react"
 import StoryDialog from "./StoryDialog"
+import Artwork from "./Artwork"
 
 const mockFeeds = [
   {
@@ -151,11 +152,20 @@ const mockFeeds = [
 
 export default function Feeds() {
   const [activereel, setActivereel] = useState(null)
+  const [activeArtwork, setActiveArtwork] = useState(null)
 
   const formatDuration = (seconds) => {
     const mins = Math.floor(seconds / 60)
     const secs = seconds % 60
     return `${mins}:${secs.toString().padStart(2, "0")}`
+  }
+
+  const handleFeedClick = (feed) => {
+    if (feed.type === "image") {
+      setActiveArtwork(feed)
+    } else if (feed.type === "story") {
+      setActivereel(feed)
+    }
   }
 
   return (
@@ -166,7 +176,7 @@ export default function Feeds() {
           <div
             key={feed.id}
             className="relative mb-4 break-inside-avoid cursor-pointer overflow-hidden rounded-xl shadow hover:shadow-lg transition"
-            onClick={() => setActivereel(feed)}
+            onClick={() => handleFeedClick(feed)}
           >
             <img
               src={feed.thumbnailUrl || "/placeholder.svg"}
@@ -186,6 +196,9 @@ export default function Feeds() {
       </div>
 
       {activereel && <StoryDialog reel={activereel} isOpen={!!activereel} onClose={() => setActivereel(null)} />}
+      {activeArtwork && (
+        <Artwork artwork={activeArtwork} isOpen={!!activeArtwork} onClose={() => setActiveArtwork(null)} />
+      )}
     </div>
   )
 }
