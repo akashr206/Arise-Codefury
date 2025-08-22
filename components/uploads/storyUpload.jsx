@@ -154,7 +154,7 @@ export default function UploadStoryDialog({ open, onClose }) {
                 process.env.NEXT_PUBLIC_CLOUDINARY_PRESET
             );
 
-            const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME;
+            const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
             const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`;
 
             const res = await fetch(uploadUrl, {

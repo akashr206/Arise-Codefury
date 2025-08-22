@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { ClerkProvider } from "@clerk/nextjs";
+import { UserProvider } from "@/contexts/UserContext";
 import Navbar from "@/components/Navbar";
 
 const geistSans = Geist({
@@ -29,8 +30,10 @@ export default function RootLayout({ children }) {
                     className={`${geistSans.variable} ${geistMono.variable} antialiased`}
                 >
                     <ThemeProvider attribute={"class"}>
-                        <Navbar></Navbar>
-                        {children}
+                        <UserProvider>
+                            <Navbar></Navbar>
+                            {children}
+                        </UserProvider>
                     </ThemeProvider>
                 </body>
             </html>
