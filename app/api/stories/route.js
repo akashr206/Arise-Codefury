@@ -30,7 +30,6 @@ export async function GET(req) {
 
 export async function POST(req) {
     const { userId } = getAuth(req);
-    console.log(userId);
 
     if (!userId)
         return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
