@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
+import ExportDetailsDoc from "../exports/exportDialog";
+import { Check } from "lucide-react";
 import {
     Heart,
     Share2,
@@ -20,7 +20,6 @@ import {
     Eye,
     Brush,
     Camera,
-    ShoppingCart,
     ArrowUpRight,
     BadgeCheck,
 } from "lucide-react";
@@ -31,7 +30,8 @@ export default function Artwork({ artwork, onBack }) {
     const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [details, setDetails] = useState(null);
     const handleMouseEnter = () => {
         setIsZooming(true);
     };
@@ -51,6 +51,16 @@ export default function Artwork({ artwork, onBack }) {
             y: e.clientY - rect.top,
         });
     };
+    async function fetchDetails() {
+        const res = await fetch(`/api/export/${artwork._id}`);
+        const data = await res.json();
+        console.log(data);
+        
+        setDetails(data);
+    }
+    useEffect(() => {
+        fetchDetails();
+    }, []);
 
     const product = artwork;
 
@@ -83,7 +93,13 @@ export default function Artwork({ artwork, onBack }) {
                     </Button>
                 </div>
             </div>
-
+            <ExportDetailsDoc
+                open={dialogOpen}
+                onOpenChange={setDialogOpen}
+                product={details?.exports[0].product}
+                compliance={details?.exports[0].compliance}
+                uploads={details?.exports[0].uploads}
+            ></ExportDetailsDoc>
             <div className="container mx-auto px-4 py-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     <div className="sticky top-24 h-fit">
@@ -302,6 +318,25 @@ export default function Artwork({ artwork, onBack }) {
                                             {product.description}
                                         </p>
                                     </CardContent>
+                                </Card>
+                            )}
+                            {details?.eligible && (
+                                <Card className="border-primary/20 shadow-lg">
+                                    <CardHeader>
+                                        <CardTitle className="flex items-center justify-between gap-2 text-primary">
+                                            <div className="flex gap-2 items-center text-green-500">
+                                                Export ready <Check></Check>
+                                            </div>
+                                            <Button
+                                                onClick={() =>
+                                                    setDialogOpen(true)
+                                                }
+                                                variant="outline"
+                                            >
+                                                View Details
+                                            </Button>
+                                        </CardTitle>
+                                    </CardHeader>
                                 </Card>
                             )}
 

@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { MessageCircle, Send, X, Palette, Sparkles } from "lucide-react";
+import { MessageCircle, Send, X, Palette, Sparkles, Bot } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -127,7 +127,7 @@ export default function Chatbot() {
                 }`}
                 size="icon"
             >
-                <MessageCircle className="h-6 w-6" />
+                <Bot className="h-6 w-6" />
                 <span className="sr-only">Open Colora AI Assistant</span>
             </Button>
 

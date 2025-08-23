@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import {
     Eye,
     Heart,
@@ -92,7 +93,7 @@ function TabsComponent({ stories = [], products = [], artistId }) {
             if (response.ok) {
                 fetchUserData(id);
                 setDeletingProduct(null);
-            } 
+            }
         } catch (error) {
             console.error("Error deleting product:", error);
             alert("Failed to delete product. Please try again.");
@@ -206,14 +207,16 @@ function TabsComponent({ stories = [], products = [], artistId }) {
 
                                         {}
                                         <div className="absolute top-3 left-3 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200">
-                                            <Button
-                                                size="sm"
-                                                variant="secondary"
-                                                className="bg-white/90 hover:bg-white text-gray-800 shadow-lg"
-                                                title="View Artwork"
-                                            >
-                                                <Eye className="w-4 h-4" />
-                                            </Button>
+                                            <Link href={`/artworks/${product._id}`}>
+                                                <Button
+                                                    size="sm"
+                                                    variant="secondary"
+                                                    className="bg-white/90 hover:bg-white text-gray-800 shadow-lg"
+                                                    title="View Artwork"
+                                                >
+                                                    <Eye className="w-4 h-4" />
+                                                </Button>
+                                            </Link>
                                         </div>
                                     </div>
 

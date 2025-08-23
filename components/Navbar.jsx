@@ -11,6 +11,7 @@ const Navbar = () => {
         { title: "Explore", link: "/explore" },
         { title: "Stories", link: "/stories" },
         { title: "Shop", link: "/shop" },
+        { title: "Export Compliances", link: "/export" },
     ];
     const [isOpen, setIsOpen] = useState(false);
     const [menuHeight, setMenuHeight] = useState(0);
