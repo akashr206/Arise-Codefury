@@ -51,6 +51,7 @@ export async function GET(req) {
             ...story,
             authorName: authorMap[story.author]?.name || "Unknown",
             authorProfile: authorMap[story.author]?.profile || null,
+            authorUsername: authorMap[story.author]?.username || "user",
         }));
 
         return NextResponse.json({

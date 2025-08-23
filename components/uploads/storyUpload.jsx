@@ -223,14 +223,14 @@ export default function UploadStoryDialog({ open, onClose, show = false }) {
                     </Button>
                 </DialogTrigger>
             )}
-            <DialogContent className="max-w-2xl mt-10 px-0 bg-white/95 backdrop-blur-sm border-0 shadow-2xl">
+            <DialogContent className="max-w-2xl px-0 max-h-[85vh] mt-12 overflow-y-auto bg-white/95 backdrop-blur-sm border-0 shadow-2xl">
                 <DialogHeader className="pb-4 px-6">
                     <DialogTitle className="text-2xl font-bold text-gray-900">
                         Create Your Story
                     </DialogTitle>
                 </DialogHeader>
 
-                <div className="space-y-6 px-6 max-h-[500px] overflow-y-auto">
+                <div className="space-y-6 px-6">
                     <div className="relative">
                         {!preview ? (
                             <div
