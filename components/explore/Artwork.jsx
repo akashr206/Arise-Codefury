@@ -5,6 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import ExportDetailsDoc from "../exports/exportDialog";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import {
+    Dialog,
+    DialogTitle,
+    DialogTrigger,
+    DialogContent,
+} from "@/components/ui/dialog";
 import { Check } from "lucide-react";
 import {
     Heart,
@@ -22,9 +30,12 @@ import {
     Camera,
     ArrowUpRight,
     BadgeCheck,
+    Instagram,
+    Twitter,
+    Mail,
 } from "lucide-react";
 
-export default function Artwork({ artwork, onBack }) {
+export default function Artwork({ artwork }) {
     const [isLoved, setIsLoved] = useState(false);
     const [isZooming, setIsZooming] = useState(false);
     const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
@@ -32,6 +43,10 @@ export default function Artwork({ artwork, onBack }) {
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [details, setDetails] = useState(null);
+    const [artistDetails, setArtistDetails] = useState({});
+    const [openArtist, setOpenArtist] = useState(false);
+    const router = useRouter();
+
     const handleMouseEnter = () => {
         setIsZooming(true);
     };
@@ -54,12 +69,18 @@ export default function Artwork({ artwork, onBack }) {
     async function fetchDetails() {
         const res = await fetch(`/api/export/${artwork._id}`);
         const data = await res.json();
-        console.log(data);
-        
+        console.log(artwork);
+
         setDetails(data);
+    }
+    async function fetchArtist() {
+        const res = await fetch(`/api/users/${artwork.artist}`);
+        const data = await res.json();
+        setArtistDetails(data);
     }
     useEffect(() => {
         fetchDetails();
+        fetchArtist();
     }, []);
 
     const product = artwork;
@@ -80,12 +101,68 @@ export default function Artwork({ artwork, onBack }) {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-background via-card to-background">
+        <div className="min-h-screen mt-20 bg-gradient-to-br from-background via-card to-background">
+            <Dialog open={openArtist} onOpenChange={setOpenArtist}>
+                <DialogContent className="max-w-sm rounded-2xl p-6">
+                    <div className="flex flex-col items-center text-center gap-4">
+                        <img
+                            src={artistDetails?.profile}
+                            alt="artist"
+                            className="h-24 w-24 rounded-full object-cover shadow-md"
+                        />
+
+                        <div>
+                            <h2 className="text-lg font-semibold">
+                                {artistDetails?.name || "Unknown Artist"}
+                            </h2>
+                            <p className="text-sm text-muted-foreground">
+                                {artistDetails?.bio || "No bio available"}
+                            </p>
+                        </div>
+
+                        <div className="flex gap-3">
+                            <Link
+                                href={`https://instagram.com/${artistDetails?.instagram}`}
+                                target="_blank"
+                            >
+                                <Button
+                                    size="icon"
+                                    variant="outline"
+                                    className="rounded-full"
+                                >
+                                    <Instagram className="h-5 w-5" />
+                                </Button>
+                            </Link>
+                            <Link href={`mailto:${artistDetails?.email}`}>
+                                <Button
+                                    size="icon"
+                                    variant="outline"
+                                    className="rounded-full"
+                                >
+                                    <Mail className="h-5 w-5" />
+                                </Button>
+                            </Link>
+                            <Link
+                                href={`https://twitter.com/${artistDetails?.twitter}`}
+                                target="_blank"
+                            >
+                                <Button
+                                    size="icon"
+                                    variant="outline"
+                                    className="rounded-full"
+                                >
+                                    <Twitter className="h-5 w-5" />
+                                </Button>
+                            </Link>
+                        </div>
+                    </div>
+                </DialogContent>
+            </Dialog>
             <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-xl border-b border-primary/20">
                 <div className="container mx-auto px-4 py-4">
                     <Button
                         variant="ghost"
-                        onClick={onBack}
+                        onClick={() => router.back()}
                         className="flex items-center gap-2 hover:bg-primary/10 transition-all duration-300 hover:scale-105"
                     >
                         <ArrowLeft className="w-4 h-4" />
@@ -96,9 +173,9 @@ export default function Artwork({ artwork, onBack }) {
             <ExportDetailsDoc
                 open={dialogOpen}
                 onOpenChange={setDialogOpen}
-                product={details?.exports[0].product}
-                compliance={details?.exports[0].compliance}
-                uploads={details?.exports[0].uploads}
+                product={details?.exports[0]?.product}
+                compliance={details?.exports[0]?.compliance}
+                uploads={details?.exports[0]?.uploads}
             ></ExportDetailsDoc>
             <div className="container mx-auto px-4 py-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -154,13 +231,6 @@ export default function Artwork({ artwork, onBack }) {
                                         </div>
                                     </div>
                                 )}
-
-                                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-2 shadow-lg">
-                                    <Eye className="w-4 h-4 text-secondary" />
-                                    <span className="text-sm font-medium">
-                                        {product.favorites || 0}
-                                    </span>
-                                </div>
                             </div>
 
                             {product.images && product.images.length > 1 && (
@@ -297,8 +367,9 @@ export default function Artwork({ artwork, onBack }) {
                                         </p>
                                     </div>
                                     <Button
+                                        onClick={() => setOpenArtist(true)}
                                         size="lg"
-                                        className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
+                                        className="bg-gradient-to-r  from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
                                     >
                                         Contact Artist{" "}
                                         <ArrowUpRight className="inline w-4 h-4 ml-1" />
@@ -413,29 +484,19 @@ export default function Artwork({ artwork, onBack }) {
                                         />
                                         {isLoved ? "Loved!" : "Love This Art"}
                                     </Button>
-                                    <Button
-                                        variant="outline"
-                                        size="lg"
-                                        className="border-secondary/30 hover:bg-secondary/10 bg-transparent"
-                                    >
-                                        <Share2 className="w-4 h-4" />
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        size="lg"
-                                        className="border-primary/30 hover:bg-primary/10 bg-transparent"
-                                    >
-                                        <Camera className="w-4 h-4" />
-                                    </Button>
                                 </div>
-                                <Button
-                                    variant="outline"
-                                    size="lg"
-                                    className={"w-full"}
+                                <Link
+                                    href={`/profile/${artistDetails.username}`}
                                 >
-                                    <MessageCircle className="w-4 h-4 mr-2" />
-                                    Connect with Artist
-                                </Button>
+                                    <Button
+                                        variant="outline"
+                                        size="lg"
+                                        className={"w-full"}
+                                    >
+                                        <MessageCircle className="w-4 h-4 mr-2" />
+                                        Connect with Artist
+                                    </Button>
+                                </Link>
                             </div>
                         </div>
                     </div>

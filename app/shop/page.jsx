@@ -256,9 +256,7 @@ export default function Shop() {
                                         </div>
                                     </CardContent>
                                     <CardFooter className="p-4 pt-0 flex justify-between items-center">
-                                        <span className="text-sm text-muted-foreground flex items-center gap-1">
-                                            ❤️ {product.favorites || 0}
-                                        </span>
+    
                                         <Link
                                             href={`/artworks/${product._id}`}
                                             size="sm"
