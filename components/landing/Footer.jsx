@@ -28,7 +28,7 @@ export default function Footer() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 mb-12">
           {/* Brand Section */}
           <div className="lg:col-span-1">
             <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
@@ -101,69 +101,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* For Artists */}
-          <div>
-            <h4 className="font-semibold text-foreground mb-4">For Artists</h4>
-            <ul className="space-y-3">
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-purple-600 transition-colors">
-                  Join Platform
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-purple-600 transition-colors">
-                  Showcase Work
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-purple-600 transition-colors">
-                  Artist Resources
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-purple-600 transition-colors">
-                  Community
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-purple-600 transition-colors">
-                  Success Stories
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Support */}
-          <div>
-            <h4 className="font-semibold text-foreground mb-4">Support</h4>
-            <ul className="space-y-3">
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-purple-600 transition-colors">
-                  Help Center
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-purple-600 transition-colors">
-                  Contact Us
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-purple-600 transition-colors">
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-purple-600 transition-colors">
-                  Terms of Service
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-purple-600 transition-colors">
-                  Cultural Guidelines
-                </a>
-              </li>
-            </ul>
-          </div>
+          
         </div>
 
         {/* Newsletter Section */}
@@ -181,7 +119,7 @@ export default function Footer() {
               />
               <Button
                 size="sm"
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                className="bg-purple-600 hover:to-pink-700"
               >
                 Subscribe
               </Button>

@@ -42,9 +42,10 @@ export default function About() {
         <div className="max-w-4xl mx-auto">
           {/* Header Section */}
           <div className="text-center mb-16 animate-fade-in-up">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
-              Preserving Cultural Heritage
-            </h1>
+           <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-pink-500 bg-clip-text text-transparent leading-tight">
+  Preserving Cultural Heritage
+</h1>
+
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Bridging the gap between traditional Indian folk artforms and the digital age
             </p>
@@ -168,7 +169,7 @@ export default function About() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-3"
+                className="bg-purple-600 hover:to-pink-600 text-white px-8 py-3"
               >
                 Explore Artists
               </Button>

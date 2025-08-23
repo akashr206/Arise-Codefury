@@ -44,7 +44,7 @@ export default function HeroSection() {
             size="lg"
             className="border-2 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-300 bg-transparent"
           >
-            View Portfolio
+           Join Community
           </Button>
         </div>
       </div>
