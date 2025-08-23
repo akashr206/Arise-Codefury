@@ -4,6 +4,8 @@ import UserInfo from "@/components/profile/UserInfo";
 import TabsComponent from "@/components/profile/TabsComponent";
 import { Loader2 } from "lucide-react";
 import { useArtist } from "@/hooks/useArtist";
+import Chatbot from "@/components/profile/Chatbot";
+
 
 const UserPage = ({ params }) => {
     const { id } = use(params);
@@ -33,6 +35,7 @@ const UserPage = ({ params }) => {
                     fetchUserData={fetchUserData}
                 />
             </div>
+            <Chatbot/>
         </div>
     );
 };
