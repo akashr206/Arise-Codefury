@@ -160,10 +160,9 @@ export default function ExportReady() {
     const canSubmit = allChecked && allUploadsDone;
 
     return (
-        <div className="p-6 space-y-8 max-w-4xl mx-auto">
-            <h1 className="text-3xl font-bold">Export Readiness Dashboard</h1>
+        <div className="p-6 space-y-8 mt-16 max-w-4xl mx-auto">
+            <h1 className="text-3xl font-bold">Export Compliance Dashboard</h1>
 
-            {/* Pending Products */}
             <Card className="shadow-lg">
                 <CardHeader>
                     <CardTitle>Products Pending Export</CardTitle>
@@ -284,7 +283,7 @@ export default function ExportReady() {
                                 <CardTitle>Export Documentation</CardTitle>
                                 <CardDescription>
                                     This product has already been marked export
-                                    ready 
+                                    ready
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-3">
@@ -317,8 +316,10 @@ export default function ExportReady() {
                                                             {key
                                                                 .charAt(0)
                                                                 .toLocaleUpperCase() +
-                                                                key.slice(1)} Certificate
-                                                            :
+                                                                key.slice(
+                                                                    1
+                                                                )}{" "}
+                                                            Certificate :
                                                         </span>{" "}
                                                         <a
                                                             href={url}
