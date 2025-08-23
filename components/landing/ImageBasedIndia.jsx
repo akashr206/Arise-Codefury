@@ -191,95 +191,118 @@ const stateData = {
   },
 }
 
-// Extremely precise clickable areas based on your uploaded map image
 const stateAreas = [
   // Jammu & Kashmir (large red area at top)
   { id: "jammu-kashmir", left: "34%", top: "2%", width: "12%", height: "15%" },
-  
+
   // Himachal Pradesh (yellow, between J&K and other states)
-  { id: "himachal-pradesh", left: "38%", top: "16%", width: "5%", height: "8%" },
-  
+  {
+    id: "himachal-pradesh",
+    left: "38%",
+    top: "16%",
+    width: "5%",
+    height: "8%",
+  },
+
   // Punjab (yellow-green, left of Himachal)
   { id: "punjab", left: "35%", top: "20%", width: "5%", height: "6%" },
-  
+
   // Haryana (small cyan area)
   { id: "haryana", left: "36%", top: "26%", width: "5%", height: "5%" },
-  
+
   // Delhi (tiny blue dot)
   { id: "delhi", left: "35.5%", top: "26%", width: "1.5%", height: "1.5%" },
-  
+
   // Uttarakhand (purple area to right of Himachal)
   { id: "uttarakhand", left: "42%", top: "21%", width: "5%", height: "7%" },
-  
+
   // Uttar Pradesh (large green area in center-north)
   { id: "uttar-pradesh", left: "42%", top: "28%", width: "12%", height: "13%" },
-  
+
   // Bihar (salmon/orange color, east of UP)
   { id: "bihar", left: "53%", top: "35%", width: "9%", height: "8%" },
-  
+
   // Jharkhand (yellow/gold area below Bihar)
   { id: "jharkhand", left: "55%", top: "43%", width: "5%", height: "8%" },
-  
+
   // West Bengal (cyan/blue area, far east)
   { id: "west-bengal", left: "60%", top: "42%", width: "7%", height: "10%" },
-  
+
   // Sikkim (tiny blue area)
   { id: "sikkim", left: "61%", top: "32%", width: "3%", height: "3%" },
-  
+
   // Assam (yellow area in northeast)
   { id: "assam", left: "66%", top: "34%", width: "9%", height: "4%" },
-  
+
   // Arunachal Pradesh (red area, far northeast)
-  { id: "arunachal-pradesh", left: "70%", top: "28%", width: "10%", height: "6%" },
-  
+  {
+    id: "arunachal-pradesh",
+    left: "70%",
+    top: "28%",
+    width: "10%",
+    height: "6%",
+  },
+
   // Nagaland (purple, small area in northeast)
   { id: "nagaland", left: "74%", top: "34%", width: "3%", height: "5%" },
-  
+
   // Manipur (green area below Nagaland)
   { id: "manipur", left: "74%", top: "39%", width: "3%", height: "5%" },
-  
+
   // Mizoram (red area, southeast of Manipur)
   { id: "mizoram", left: "71%", top: "44%", width: "3%", height: "5%" },
-  
+
   // Tripura (green area)
   { id: "tripura", left: "69%", top: "44%", width: "3%", height: "4%" },
-  
+
   // Meghalaya (yellow area)
   { id: "meghalaya", left: "67%", top: "38%", width: "5%", height: "3%" },
-  
+
   // Rajasthan (large purple area on left)
   { id: "rajasthan", left: "24%", top: "30%", width: "15%", height: "12%" },
-  
+
   // Gujarat (yellow area, southwest)
   { id: "gujarat", left: "23%", top: "44%", width: "10%", height: "16%" },
-  
+
   // Madhya Pradesh (pink area, large central state)
-  { id: "madhya-pradesh", left: "34%", top: "42%", width: "15%", height: "11%" },
-  
+  {
+    id: "madhya-pradesh",
+    left: "34%",
+    top: "42%",
+    width: "15%",
+    height: "11%",
+  },
+
   // Chhattisgarh (blue area, right of MP)
   { id: "chhattisgarh", left: "47%", top: "47%", width: "8%", height: "14%" },
-  
+
   // Odisha (yellow-gold area on east coast)
   { id: "odisha", left: "52%", top: "52%", width: "10%", height: "11%" },
-  
+
   // Maharashtra (large salmon/red area)
   { id: "maharashtra", left: "27%", top: "55%", width: "17%", height: "13%" },
-  
+
   // Goa (small purple area on west coast)
   { id: "goa", left: "31%", top: "71%", width: "3%", height: "3%" },
-  
+
   // Telangana (yellow area, center-south)
   { id: "telangana", left: "40%", top: "61%", width: "7%", height: "10%" },
-  
+
   // Andhra Pradesh (pink area, southeast)
-  { id: "andhra-pradesh", left: "39%", top: "68%", width: "13%", height: "12%" },
-  
+  {
+    id: "andhra-pradesh",
+    left: "41%",
+    top: "70%",
+    width: "10%",
+    height: "12%",
+  },
+
   // Karnataka (purple area, southwest)
   { id: "karnataka", left: "34%", top: "68%", width: "7%", height: "17%" },
-  
+
   // Tamil Nadu (green area, far south)
   { id: "tamil-nadu", left: "40%", top: "81%", width: "6%", height: "14%" },
-  
+
   // Kerala (red area on southwest coast)
   { id: "kerala", left: "35%", top: "85%", width: "4%", height: "13%" },
 ]
@@ -289,15 +312,8 @@ export default function IndiaArtMap() {
   const [hoveredState, setHoveredState] = useState(null)
 
   useEffect(() => {
-    if (selectedState) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = "unset"
-    }
-
-    return () => {
-      document.body.style.overflow = "unset"
-    }
+    // Don't disable body scrolling when modal is open
+    // Let the modal handle its own scrolling
   }, [selectedState])
 
   const handleStateClick = (stateId) => {
@@ -309,58 +325,53 @@ export default function IndiaArtMap() {
   }
 
   return (
-    <div className="w-full h-screen bg-slate-50 relative overflow-hidden">
+    <div className="w-full h-screen bg-slate-50 dark:bg-purple-500/10 relative overflow-hidden">
       {/* Header */}
-      <div className="absolute top-0 left-0 right-0 z-20 bg-white shadow-sm p-4">
-        <h1 className="text-2xl font-bold text-center text-gray-800">
+      <div className="absolute top-0 left-0 right-0 z-20 bg-white shadow-sm dark:bg-purple-600/10 p-2 sm:p-4">
+        <h1 className="text-lg sm:text-2xl font-bold text-center text-gray-800 dark:text-white">
           Traditional Art Forms of India
         </h1>
-        <p className="text-sm text-gray-600 text-center mt-1">
+        <p className="text-xs sm:text-sm text-gray-600 text-center mt-1 dark:text-white/50">
           Click on any state to explore its traditional art form
         </p>
       </div>
 
-      {/* Overlay for modal */}
-      {selectedState && (
-        <div 
-          className="fixed inset-0 z-40 bg-black bg-opacity-50 backdrop-blur-sm transition-opacity duration-300"
-          onClick={closeModal}
-        />
-      )}
-
-      <div className="flex w-full h-full pt-20">
+      <div className="flex w-full h-full pt-16 sm:pt-20">
         {/* Map Container */}
-        <div className={`relative transition-all duration-500 ease-in-out ${selectedState ? 'w-1/2' : 'w-full'} h-full`}>
-          <div className="relative w-full h-full flex items-center justify-center p-4">
-            {/* India Map - Create a colored placeholder until you add your image */}
+        <div
+          className={`relative transition-all duration-500 ease-in-out ${
+            selectedState ? "w-1/2 lg:w-2/3" : "w-full"
+          } h-full`}
+        >
+          <div
+            className="relative w-full h-full flex items-center justify-center p-4"
+            onClick={selectedState ? closeModal : undefined}
+          >
+            {/* India Map */}
             <div className="relative max-w-4xl max-h-full w-full h-full">
               <img
                 src="/India.png"
                 alt="India Map"
-                className="w-full h-full object-contain"
+                className={`w-full h-full object-contain ${selectedState ? "cursor-pointer" : ""}`}
                 style={{ maxHeight: "100%", maxWidth: "100%" }}
-              />
+              />
 
-
-              {/* Clickable State Areas - These will work with any India map you add */}
+              {/* Invisible but clickable state areas */}
               <div className="absolute inset-0">
                 {stateAreas.map((area) => (
                   <button
                     key={area.id}
-                    className={`absolute transition-all duration-200 border-2 rounded-sm ${
-                      hoveredState === area.id 
-                        ? 'bg-blue-500 bg-opacity-40 border-blue-600' 
-                        : selectedState === area.id
-                        ? 'bg-green-500 bg-opacity-50 border-green-600'
-                        : 'bg-transparent border-transparent hover:bg-blue-300 hover:bg-opacity-30 hover:border-blue-400'
-                    }`}
+                    className="absolute bg-transparent border-none cursor-pointer"
                     style={{
                       left: area.left,
                       top: area.top,
                       width: area.width,
                       height: area.height,
                     }}
-                    onClick={() => handleStateClick(area.id)}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleStateClick(area.id)
+                    }}
                     onMouseEnter={() => setHoveredState(area.id)}
                     onMouseLeave={() => setHoveredState(null)}
                     aria-label={`Click to learn about ${stateData[area.id]?.name}`}
@@ -369,7 +380,7 @@ export default function IndiaArtMap() {
               </div>
             </div>
           </div>
-          
+
           {/* Hover tooltip */}
           {hoveredState && !selectedState && (
             <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-lg z-30 pointer-events-none">
@@ -379,83 +390,137 @@ export default function IndiaArtMap() {
           )}
         </div>
 
-        {/* Modal/Detail Panel */}
+        {/* Modal/Detail Panel - Responsive Design */}
         {selectedState && stateData[selectedState] && (
-          <div className="w-1/2 h-full bg-white border-l border-gray-200 overflow-y-auto z-50">
-            <div className="p-8">
-              <div className="flex justify-between items-start mb-6">
-                <h2 className="text-3xl font-bold text-gray-900">{stateData[selectedState].name}</h2>
-                <button
-                  onClick={closeModal}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                  aria-label="Close modal"
-                >
-                  <X className="w-6 h-6" />
-                </button>
+          <>
+            {/* Mobile Modal Overlay */}
+            <div className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden" onClick={closeModal} />
+
+            {/* Modal Content */}
+            <div
+              className={`
+              fixed md:relative
+              inset-x-0 bottom-0 md:inset-auto
+              w-full md:w-1/2 lg:w-1/3
+              h-3/4 md:h-full
+              bg-white dark:bg-gray-950 
+              border-t md:border-t-0 md:border-l border-gray-200 dark:border-gray-700 
+              overflow-y-auto z-50
+              rounded-t-2xl md:rounded-none
+              transform transition-transform duration-300 ease-out
+              translate-y-0
+              top-20
+            `}
+            >
+              {/* Background map image for modal */}
+              <div className="absolute inset-0 opacity-10">
+                <img src="/India.png" alt="India Map Background" className="w-full h-full object-cover" />
               </div>
 
-              <div className="space-y-6">
-                {/* Art form visual representation */}
-                <div className="w-full h-64 bg-gradient-to-br from-orange-400 to-pink-500 rounded-lg flex items-center justify-center text-white">
-                  <div className="text-center">
-                    <div className="text-6xl mb-4">🎨</div>
-                    <div className="text-xl font-bold">{stateData[selectedState].artForm}</div>
+              <div className="relative z-10 p-4 sm:p-6 lg:p-8">
+                {/* Mobile drag handle */}
+                <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4 md:hidden" />
+
+                <div className="flex justify-between items-start mb-4 sm:mb-6">
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-gray-100 pr-4">
+                    {stateData[selectedState].name}
+                  </h2>
+                  <button
+                    onClick={closeModal}
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors flex-shrink-0"
+                    aria-label="Close modal"
+                  >
+                    <X className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </button>
+                </div>
+
+                <div className="space-y-4 sm:space-y-6">
+                  {/* Art form visual representation - responsive */}
+                  <div className="w-full h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-orange-400 to-pink-500 rounded-lg flex items-center justify-center text-white">
+                    <div className="text-center px-4">
+                      <div className="text-4xl sm:text-5xl lg:text-6xl mb-2 sm:mb-4">🎨</div>
+                      <div className="text-base sm:text-lg lg:text-xl font-bold leading-tight">
+                        {stateData[selectedState].artForm}
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                    About {stateData[selectedState].artForm}
-                  </h3>
-                  <p className="text-gray-700 leading-relaxed text-lg">
-                    {stateData[selectedState].description}
-                  </p>
-                </div>
+                  <div>
+                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2 sm:mb-3">
+                      About {stateData[selectedState].artForm}
+                    </h3>
+                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm sm:text-base lg:text-lg">
+                      {stateData[selectedState].description}
+                    </p>
+                  </div>
 
-                <div className="pt-4 border-t border-gray-200">
-                  <p className="text-sm text-gray-600">
-                    Traditional art form from <strong>{stateData[selectedState].name}</strong>
-                  </p>
-                </div>
+                  <div className="pt-3 sm:pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                      Traditional art form from <strong>{stateData[selectedState].name}</strong>
+                    </p>
+                  </div>
 
-                {/* Art form characteristics */}
-                <div className="bg-gray-50 p-6 rounded-lg">
-                  <h4 className="font-semibold text-gray-900 mb-3">Cultural Heritage</h4>
-                  <div className="grid grid-cols-1 gap-3">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                      <span className="text-sm text-gray-700">Region: {stateData[selectedState].name}</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <div className="w-3 h-3 rounded-full bg-amber-500"></div>
-                      <span className="text-sm text-gray-700">Type: Traditional Handicraft</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                      <span className="text-sm text-gray-700">Status: Living Heritage</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <div className="w-3 h-3 rounded-full bg-purple-500"></div>
-                      <span className="text-sm text-gray-700">Tradition: Centuries Old</span>
+                  {/* Art form characteristics - responsive grid */}
+                  <div className="bg-white dark:bg-gray-900 bg-opacity-90 dark:bg-opacity-90 p-4 sm:p-6 rounded-lg">
+                    <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 text-sm sm:text-base">
+                      Cultural Heritage
+                    </h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2 sm:gap-3">
+                      <div className="flex items-center space-x-2 sm:space-x-3">
+                        <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-blue-500 flex-shrink-0"></div>
+                        <span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300">
+                          Region: {stateData[selectedState].name}
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-2 sm:space-x-3">
+                        <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-amber-500 flex-shrink-0"></div>
+                        <span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300">
+                          Type: Traditional Handicraft
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-2 sm:space-x-3">
+                        <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-green-500 flex-shrink-0"></div>
+                        <span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300">
+                          Status: Living Heritage
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-2 sm:space-x-3">
+                        <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-purple-500 flex-shrink-0"></div>
+                        <span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300">
+                          Tradition: Centuries Old
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </>
         )}
       </div>
 
-      {/* Instructions */}
-      <div className="absolute bottom-4 left-4 bg-white p-4 rounded-lg shadow-lg max-w-xs z-10">
-        <h4 className="font-semibold text-gray-900 mb-2">How to explore</h4>
-        <div className="space-y-1 text-sm text-gray-600">
+      {/* Instructions - Responsive Legend */}
+      <div
+        className={`
+        absolute z-10 
+        bottom-2 sm:bottom-4 
+        left-2 sm:left-4 
+        right-2 sm:right-auto
+        p-3 sm:p-4 
+        rounded-lg shadow-lg 
+        max-w-full sm:max-w-xs
+        bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-200
+        ${selectedState ? "hidden sm:block" : "block"}
+      `}
+      >
+        <h4 className="font-semibold mb-2 text-sm sm:text-base">How to explore</h4>
+        <div className="space-y-1 text-xs sm:text-sm">
           <div className="flex items-center space-x-2">
-            <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+            <div className="w-2 h-2 bg-blue-400 rounded-full flex-shrink-0"></div>
             <span>Hover over states to preview</span>
           </div>
           <div className="flex items-center space-x-2">
-            <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+            <div className="w-2 h-2 bg-green-400 rounded-full flex-shrink-0"></div>
             <span>Click to explore art forms</span>
           </div>
         </div>
