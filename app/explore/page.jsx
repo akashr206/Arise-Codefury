@@ -9,20 +9,14 @@ export default function ExplorePage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-
     useEffect(() => {
         async function fetchData() {
             try {
                 setLoading(true);
 
                 const [storiesRes, productsRes] = await Promise.all([
-                    fetch(`${baseUrl}/api/stories/all?limit=100`, {
-                        cache: "no-store",
-                    }),
-                    fetch(`${baseUrl}/api/products/all?limit=100`, {
-                        cache: "no-store",
-                    }),
+                    fetch(`/api/stories/all?limit=100`),
+                    fetch(`/api/products/all?limit=100`),
                 ]);
 
                 if (!storiesRes.ok || !productsRes.ok) {
@@ -43,7 +37,7 @@ export default function ExplorePage() {
         }
 
         fetchData();
-    }, [baseUrl]);
+    }, []);
 
     if (loading)
         return (
