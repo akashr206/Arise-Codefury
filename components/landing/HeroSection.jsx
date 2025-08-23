@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 export default function HeroSection() {
   return (
@@ -30,12 +31,13 @@ export default function HeroSection() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center animate-fade-in-up animation-delay-400">
+          <Link href={"/explore"}>
           <Button
             size="lg"
             className="bg-accent hover:bg-accent/90 text-accent-foreground px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl w-full sm:w-auto"
           >
-            Discover Art
-          </Button>
+            Explore Art
+          </Button></Link>
           <Button
             variant="outline"
             size="lg"
