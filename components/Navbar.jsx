@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import UserActions from "@/components/UserActions";
+import { cinzel } from '../lib/fonts'
 
 const Navbar = () => {
     const navs = [
@@ -43,7 +44,7 @@ const Navbar = () => {
             >
                 <div className="w-full  flex justify-between items-center">
                     <Link href={"/"} className="overflow-hidden rounded-md">
-                        <h2 className="font-bold text-xl tracking-wider">
+                        <h2 className={`font-bold text-xl tracking-wider ${cinzel.className}`}>
                             ARISE
                         </h2>
                     </Link>
