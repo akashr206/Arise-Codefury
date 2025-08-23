@@ -21,6 +21,7 @@ import {
     ExternalLink,
 } from "lucide-react";
 import Link from "next/link";
+import { BadgeCheck } from "lucide-react";
 
 export default function StoryDialog({ story, open, onOpenChange }) {
     const [isLiked, setIsLiked] = useState(false);
@@ -71,11 +72,6 @@ export default function StoryDialog({ story, open, onOpenChange }) {
     const handleVideoToggle = () => {
         setIsPlaying(!isPlaying);
     };
-
-    const handleProductClick = (product) => {
-        console.log("Product clicked:", product);
-    };
-
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-4xl max-h-[90vh] mt-10 overflow-hidden p-0 bg-black">
@@ -84,6 +80,7 @@ export default function StoryDialog({ story, open, onOpenChange }) {
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <div className="flex items-center gap-3">
+                                {console.log(story)}
                                 <Avatar className="w-10 h-10 border-2 border-white">
                                     <AvatarImage
                                         src={story.authorProfile}
@@ -100,6 +97,9 @@ export default function StoryDialog({ story, open, onOpenChange }) {
                                 <div>
                                     <p className="text-white font-semibold text-sm">
                                         {story.authorName || "Anonymous Artist"}
+                                        {story.authorVerified && (
+                                            <BadgeCheck className="inline-block w-5 h-5 ml-1 fill-blue-500 text-white" />
+                                        )}
                                     </p>
                                     <p className="text-white/70 text-xs">
                                         {story.createdAt

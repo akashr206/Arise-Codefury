@@ -71,7 +71,7 @@ export async function POST(req) {
     const productCount = await Product.countDocuments({ artist: userId });
 
     if (productCount >= 3) {
-        await User.findOneAndUpdate({ clerkId: userId }, { isVerified: true });
+        await User.findOneAndUpdate({ id: userId }, { isVerified: true });
     }
 
     return NextResponse.json(product, { status: 201 });

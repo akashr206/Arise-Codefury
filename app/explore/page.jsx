@@ -1,43 +1,62 @@
-import React from 'react'
-import Feeds from '@/components/explore/Feeds'
+"use client";
+import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
+import Feeds from "@/components/explore/Feeds";
 
-async function getStories() {
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/stories/all?limit=100`, {
-      cache: 'no-store'
-    });
-    if (!response.ok) throw new Error('Failed to fetch stories');
-    const data = await response.json();
-    return data.stories || [];
-  } catch (error) {
-    console.error('Error fetching stories:', error);
-    return [];
-  }
-}
+export default function ExplorePage() {
+    const [stories, setStories] = useState([]);
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-async function getProducts() {
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/products/all?limit=100`, {
-      cache: 'no-store'
-    });
-    if (!response.ok) throw new Error('Failed to fetch products');
-    const data = await response.json();
-    return data.products || [];
-  } catch (error) {
-    console.error('Error fetching products:', error);
-    return [];
-  }
-}
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-export default async function ExplorePage() {
-  const [stories, products] = await Promise.all([
-    getStories(),
-    getProducts()
-  ]);
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                setLoading(true);
 
-  return (
-    <div className='mt-20'>
-      <Feeds stories={stories} products={products} />
-    </div>
-  )
+                const [storiesRes, productsRes] = await Promise.all([
+                    fetch(`${baseUrl}/api/stories/all?limit=100`, {
+                        cache: "no-store",
+                    }),
+                    fetch(`${baseUrl}/api/products/all?limit=100`, {
+                        cache: "no-store",
+                    }),
+                ]);
+
+                if (!storiesRes.ok || !productsRes.ok) {
+                    throw new Error("Failed to fetch data");
+                }
+
+                const storiesData = await storiesRes.json();
+                const productsData = await productsRes.json();
+
+                setStories(storiesData.stories || []);
+                setProducts(productsData.products || []);
+            } catch (err) {
+                console.error("Error fetching data:", err);
+                setError("Something went wrong while fetching explore data");
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchData();
+    }, [baseUrl]);
+
+    if (loading)
+        return (
+            <div className="mt-20 w-screen h-screen flex flex-col items-center justify-center">
+                <Loader2 className="animate-spin"></Loader2>
+                Loading
+            </div>
+        );
+    if (error) return <div className="mt-20 text-red-500">{error}</div>;
+
+    return (
+        <div className="mt-20">
+            <Feeds stories={stories} products={products} />
+        </div>
+    );
 }

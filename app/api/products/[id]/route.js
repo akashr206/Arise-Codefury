@@ -1,15 +1,27 @@
 import { NextResponse } from "next/server";
-import { auth, getAuth } from "@clerk/nextjs/server";
+import { getAuth } from "@clerk/nextjs/server";
 import { connectMongoDB } from "@/lib/db";
 import Product from "@/models/product";
+import User from "@/models/user";
 
 export async function GET(req, { params }) {
     const { id } = await params;
     await connectMongoDB();
-    const product = await Product.findById(id);
+    let product = await Product.findById(id);
+    const userId = product?.artist;
+    const author = await User.findOne({ id: userId }).lean();
+    const newP = {
+        ...product._doc,
+        artistName: author?.name || "Unknown",
+        artistProfile: author?.profile || null,
+        artistUsername: author?.username || "user",
+        artistVerified: author?.isVerified || false,
+        artistLocation: author?.location || "",
+    };
+
     if (!product)
         return NextResponse.json({ message: "Not found" }, { status: 404 });
-    return NextResponse.json(product);
+    return NextResponse.json(newP);
 }
 
 export async function PATCH(req, { params }) {

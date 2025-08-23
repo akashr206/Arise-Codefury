@@ -22,6 +22,7 @@ import {
     Camera,
     ShoppingCart,
     ArrowUpRight,
+    BadgeCheck,
 } from "lucide-react";
 
 export default function Artwork({ artwork, onBack }) {
@@ -244,13 +245,17 @@ export default function Artwork({ artwork, onBack }) {
                                                 {product.artistName ||
                                                     "Unknown Artist"}
                                             </h3>
-                                            <Sparkles className="w-5 h-5 text-primary" />
+                                            {product.artistVerified && (
+                                                <div title={"Verified Artist"}>
+                                                    <BadgeCheck className="w-5 h-5 text-blue-500" />
+                                                </div>
+                                            )}
                                         </div>
                                         <div className="flex items-center gap-4 text-sm text-muted-foreground">
                                             <div className="flex items-center gap-1">
                                                 <MapPin className="w-3 h-3" />
                                                 <span>
-                                                    {product.location ||
+                                                    {product.artistLocation ||
                                                         "Unknown Location"}
                                                 </span>
                                             </div>
@@ -268,7 +273,7 @@ export default function Artwork({ artwork, onBack }) {
                                             Price
                                         </p>
                                         <p className="text-3xl font-bold text-foreground">
-                                            $
+                                            ₹
                                             {product.price?.toLocaleString() ||
                                                 "Contact for price"}
                                         </p>

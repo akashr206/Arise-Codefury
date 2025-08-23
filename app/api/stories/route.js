@@ -23,6 +23,8 @@ export async function GET(req) {
         ...story,
         authorName: authorMap[story.author]?.name || "Unknown",
         authorProfile: authorMap[story.author]?.profile || null,
+        authorVerified: authorMap[story.author]?.isVerified || false,
+        authorUsername: authorMap[story.author]?.username || "user",
     }));
 
     return NextResponse.json(stories);

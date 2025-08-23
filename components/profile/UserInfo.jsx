@@ -5,7 +5,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useUserContext } from "@/contexts/UserContext";
 import EditUserDialog from "./EditUserDialog";
-import { MapPin, Mail, Instagram, Twitter, UserPlus } from "lucide-react";
+import {
+    MapPin,
+    Mail,
+    Instagram,
+    Twitter,
+    UserPlus,
+    BadgeCheck,
+} from "lucide-react";
 import { SignOutButton, SignedIn } from "@clerk/nextjs";
 export default function UserInfo({ artist }) {
     const { user: currentUser } = useUserContext();
@@ -93,7 +100,11 @@ export default function UserInfo({ artist }) {
                                 </div>
                                 <SignedIn>
                                     {isOwnProfile && (
-                                        <Button variant={"destructive"} asChild className="w-full sm:w-auto">
+                                        <Button
+                                            variant={"destructive"}
+                                            asChild
+                                            className="w-full sm:w-auto"
+                                        >
                                             <SignOutButton></SignOutButton>
                                         </Button>
                                     )}
@@ -105,15 +116,25 @@ export default function UserInfo({ artist }) {
                     <div className="flex items-center justify-center w-full">
                         <div className="flex-1 space-y-4 text-center lg:text-left">
                             <div>
-                                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2">
+                                <h1 className="text-2xl flex gap-2 items-center sm:text-3xl md:text-4xl font-bold text-foreground mb-2">
                                     {artist?.name}
+                                    {artist?.isVerified && (
+                                        <div
+                                            className="cursor-pointer group"
+                                            title="Verified Artist"
+                                        >
+                                            <BadgeCheck className="inline-block w-7 h-7 text-blue-500 ml-1" />
+                                        </div>
+                                    )}
                                 </h1>
                                 <p className="text-base sm:text-lg text-muted-foreground mb-1">
                                     {artist?.username}
                                 </p>
                                 <div className="flex items-center justify-center lg:justify-start gap-2 text-muted-foreground">
                                     <MapPin className="w-4 h-4" />
-                                    <span className="text-sm sm:text-base">{artist?.location}</span>
+                                    <span className="text-sm sm:text-base">
+                                        {artist?.location}
+                                    </span>
                                 </div>
                             </div>
 

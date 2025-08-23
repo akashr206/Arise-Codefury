@@ -17,7 +17,6 @@ const ProductSchema = new Schema(
         price: { type: Number, required: true, min: 0 },
         artist: { type: String, required: true },
         artistName: { type: String },
-        isVerified: { type: Boolean, default: false },
         medium: { type: String },
         year: { type: Number, min: 0 },
         dimensions: {

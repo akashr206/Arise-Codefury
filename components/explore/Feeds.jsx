@@ -33,6 +33,7 @@ export default function Feeds({ stories = [], products = [] }) {
                 createdAt: story.createdAt,
                 isStory: true,
                 originalStory: story,
+                authorVerified: story.authorVerified || false,
             });
         });
 
@@ -80,6 +81,7 @@ export default function Feeds({ stories = [], products = [] }) {
             router.push(`/artworks/${feed.id}`);
         } else if (feed.type === "story") {
             setActivereel(feed);
+            console.log(feed);
         }
     };
 
@@ -124,7 +126,10 @@ export default function Feeds({ stories = [], products = [] }) {
                             </div>
                         )}
                         {feed.type === "product" && (
-                            <div className="absolute inset-0 z-[99999] bg-transparent group-hover:bg-black/70 group-hover:backdrop-blur-md transition-all px-2 py-1 flex items-center justify-center rounded-md"> <ExternalLink className="group-hover:text-white text-transparent transition-all "></ExternalLink></div>
+                            <div className="absolute inset-0 z-[99999] bg-transparent group-hover:bg-black/70 group-hover:backdrop-blur-md transition-all px-2 py-1 flex items-center justify-center rounded-md">
+                                {" "}
+                                <ExternalLink className="group-hover:text-white text-transparent transition-all "></ExternalLink>
+                            </div>
                         )}
 
                         {feed.type === "product" && (

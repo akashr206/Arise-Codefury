@@ -22,7 +22,7 @@ export default function EditStoryDialog({ story, open, onClose, onUpdate }) {
     const [tagInput, setTagInput] = useState("");
     const [updating, setUpdating] = useState(false);
     const { fetchUserData } = useArtist();
-    const { user } = useUser(user);
+    const { user } = useUser();
 
     useEffect(() => {
         if (story) {
