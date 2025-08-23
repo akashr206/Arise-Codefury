@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+import { auth, getAuth } from "@clerk/nextjs/server";
 import { connectMongoDB } from "@/lib/db";
 import Story from "@/models/story";
 
@@ -14,7 +14,7 @@ export async function GET(req, { params }) {
 
 export async function PATCH(req, { params }) {
     const { id } = await params;
-    const { userId } = auth();
+    const { userId } = getAuth(req);
     if (!userId)
         return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
@@ -39,7 +39,7 @@ export async function PATCH(req, { params }) {
 
 export async function DELETE(req, { params }) {
     const { id } = await params;
-    const { userId } = auth();
+    const { userId } = getAuth(req);
     if (!userId)
         return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     await connectMongoDB();

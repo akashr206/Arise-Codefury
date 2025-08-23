@@ -19,9 +19,9 @@ import {
     X,
     Play,
     Pause,
-    ShoppingCart,
     ExternalLink,
 } from "lucide-react";
+import Link from "next/link";
 
 export default function StoryDialog({ story, open, onOpenChange }) {
     const [isLiked, setIsLiked] = useState(false);
@@ -76,7 +76,6 @@ export default function StoryDialog({ story, open, onOpenChange }) {
     };
 
     const handleProductClick = (product) => {
-        // TODO: Navigate to product page or open product modal
         console.log("Product clicked:", product);
     };
 
@@ -157,7 +156,7 @@ export default function StoryDialog({ story, open, onOpenChange }) {
                             <img
                                 src={story.mediaUrl}
                                 alt="Story"
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-contain"
                             />
                         )}
                     </div>
@@ -169,7 +168,6 @@ export default function StoryDialog({ story, open, onOpenChange }) {
                             </p>
                         )}
 
-                        {/* Tags */}
                         {story.tags && story.tags.length > 0 && (
                             <div className="flex flex-wrap gap-2 mb-4">
                                 {story.tags.map((tag, index) => (
@@ -191,8 +189,9 @@ export default function StoryDialog({ story, open, onOpenChange }) {
                                 </p>
                                 <div className="flex gap-3 overflow-x-auto pb-2">
                                     {linkedProducts.map((product) => (
-                                        <div
+                                        <Link
                                             key={product._id}
+                                            href={`/artworks/${product._id}`}
                                             className="flex-shrink-0 bg-white/10 backdrop-blur-sm rounded-lg p-3 min-w-[200px] border border-white/20 hover:bg-white/20 transition-colors duration-200 cursor-pointer"
                                             onClick={() =>
                                                 handleProductClick(product)
@@ -235,7 +234,7 @@ export default function StoryDialog({ story, open, onOpenChange }) {
                                                     <ExternalLink className="w-4 h-4" />
                                                 </Button>
                                             </div>
-                                        </div>
+                                        </Link>
                                     ))}
                                 </div>
                             </div>
