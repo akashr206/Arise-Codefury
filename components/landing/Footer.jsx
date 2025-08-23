@@ -6,39 +6,39 @@ export default function Footer() {
       {/* Decorative Background Elements */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Floating geometric shapes */}
-        <div className="absolute top-10 left-10 w-16 h-16 border border-purple-500/20 rounded-full animate-float-slow"></div>
-        <div className="absolute top-20 right-20 w-8 h-8 bg-purple-500/10 rounded-full animate-pulse-slow"></div>
-        <div className="absolute bottom-20 left-1/4 w-12 h-12 border-2 border-purple-400/15 rotate-45 animate-spin-slow"></div>
-        <div className="absolute bottom-10 right-1/3 w-6 h-6 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full animate-bounce-slow"></div>
+        <div className="hidden sm:block absolute top-10 left-4 sm:left-10 w-12 h-12 sm:w-16 sm:h-16 border border-purple-500/20 rounded-full animate-float-slow"></div>
+        <div className="hidden md:block absolute top-20 right-8 md:right-20 w-6 h-6 sm:w-8 sm:h-8 bg-purple-500/10 rounded-full animate-pulse-slow"></div>
+        <div className="hidden lg:block absolute bottom-20 left-1/4 w-10 h-10 sm:w-12 sm:h-12 border-2 border-purple-400/15 rotate-45 animate-spin-slow"></div>
+        <div className="hidden sm:block absolute bottom-10 right-1/3 w-4 h-4 sm:w-6 sm:h-6 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full animate-bounce-slow"></div>
 
         {/* Traditional art pattern inspired lines */}
-        <div className="absolute top-0 left-1/2 w-px h-full bg-gradient-to-b from-transparent via-purple-500/10 to-transparent"></div>
-        <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-purple-500/10 to-transparent"></div>
+        <div className="hidden md:block absolute top-0 left-1/2 w-px h-full bg-gradient-to-b from-transparent via-purple-500/10 to-transparent"></div>
+        <div className="hidden md:block absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-purple-500/10 to-transparent"></div>
 
         {/* Constellation dots */}
-        <div className="absolute top-16 left-1/3 w-1 h-1 bg-purple-400/30 rounded-full animate-twinkle"></div>
+        <div className="hidden sm:block absolute top-16 left-1/3 w-1 h-1 bg-purple-400/30 rounded-full animate-twinkle"></div>
         <div
-          className="absolute top-32 right-1/4 w-1 h-1 bg-pink-400/30 rounded-full animate-twinkle"
+          className="hidden md:block absolute top-32 right-1/4 w-1 h-1 bg-pink-400/30 rounded-full animate-twinkle"
           style={{ animationDelay: "1s" }}
         ></div>
         <div
-          className="absolute bottom-24 left-1/5 w-1 h-1 bg-purple-400/30 rounded-full animate-twinkle"
+          className="hidden lg:block absolute bottom-24 left-1/5 w-1 h-1 bg-purple-400/30 rounded-full animate-twinkle"
           style={{ animationDelay: "2s" }}
         ></div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 mb-12">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
           {/* Brand Section */}
-          <div className="lg:col-span-1">
-            <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
+          <div className="sm:col-span-2 lg:col-span-1">
+            <h3 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3 sm:mb-4">
               ArtHeritage
             </h3>
-            <p className="text-muted-foreground mb-6 leading-relaxed">
+            <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6 leading-relaxed">
               Preserving and promoting traditional Indian folk artforms in the digital age. Connecting artists with
               global audiences.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex flex-wrap gap-2 sm:gap-4">
               <Button
                 variant="outline"
                 size="sm"
@@ -70,57 +70,67 @@ export default function Footer() {
           </div>
 
           {/* Art Forms */}
-          <div>
-            <h4 className="font-semibold text-foreground mb-4">Traditional Art Forms</h4>
-            <ul className="space-y-3">
+          <div className="sm:col-span-1">
+            <h4 className="text-sm sm:text-base font-semibold text-foreground mb-3 sm:mb-4">Traditional Art Forms</h4>
+            <ul className="space-y-2 sm:space-y-3">
               <li>
-                <a href="#" className="text-muted-foreground hover:text-purple-600 transition-colors">
+                <a
+                  href="#"
+                  className="text-sm sm:text-base text-muted-foreground hover:text-purple-600 transition-colors"
+                >
                   Warli Art
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-purple-600 transition-colors">
+                <a
+                  href="#"
+                  className="text-sm sm:text-base text-muted-foreground hover:text-purple-600 transition-colors"
+                >
                   Pithora Paintings
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-purple-600 transition-colors">
+                <a
+                  href="#"
+                  className="text-sm sm:text-base text-muted-foreground hover:text-purple-600 transition-colors"
+                >
                   Madhubani Art
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-purple-600 transition-colors">
+                <a
+                  href="#"
+                  className="text-sm sm:text-base text-muted-foreground hover:text-purple-600 transition-colors"
+                >
                   Gond Paintings
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-purple-600 transition-colors">
+                <a
+                  href="#"
+                  className="text-sm sm:text-base text-muted-foreground hover:text-purple-600 transition-colors"
+                >
                   Kalamkari
                 </a>
               </li>
             </ul>
           </div>
-
-          
         </div>
 
         {/* Newsletter Section */}
-        <div className="border-t border-border/20 pt-8 mb-8">
+        <div className="border-t border-border/20 pt-6 sm:pt-8 mb-6 sm:mb-8">
           <div className="max-w-md mx-auto text-center">
-            <h4 className="font-semibold text-foreground mb-2">Stay Connected</h4>
-            <p className="text-muted-foreground mb-4 text-sm">
+            <h4 className="text-sm sm:text-base font-semibold text-foreground mb-2">Stay Connected</h4>
+            <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">
               Get updates on new artists, exhibitions, and cultural events
             </p>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <input
                 type="email"
                 placeholder="Enter your email"
                 className="flex-1 px-3 py-2 bg-background border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500/50"
               />
-              <Button
-                size="sm"
-                className="bg-purple-600 hover:to-pink-700"
-              >
+              <Button size="sm" className="bg-purple-600 hover:to-pink-700 w-full sm:w-auto">
                 Subscribe
               </Button>
             </div>
@@ -128,16 +138,16 @@ export default function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-border/20 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-muted-foreground text-sm mb-4 md:mb-0">
+        <div className="border-t border-border/20 pt-6 sm:pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-xs sm:text-sm text-muted-foreground text-center md:text-left">
             © 2024 ArtHeritage. Preserving culture, empowering artists.
           </p>
-          <div className="flex items-center space-x-6 text-sm text-muted-foreground">
+          <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6 text-xs sm:text-sm text-muted-foreground">
             <span className="flex items-center">
               <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
               Supporting 500+ Artists
             </span>
-            <span>Made with ❤️ for Indian Culture</span>
+            <span className="text-center">Made with ❤️ for Indian Culture</span>
           </div>
         </div>
       </div>
