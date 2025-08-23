@@ -4,6 +4,7 @@ import { ThemeProvider } from "next-themes";
 import { ClerkProvider } from "@clerk/nextjs";
 import { UserProvider } from "@/contexts/UserContext";
 import Navbar from "@/components/Navbar";
+import { ArtistProvider } from "@/hooks/useArtist";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -31,8 +32,10 @@ export default function RootLayout({ children }) {
                 >
                     <ThemeProvider attribute={"class"}>
                         <UserProvider>
-                            <Navbar></Navbar>
-                            {children}
+                            <ArtistProvider>
+                                <Navbar></Navbar>
+                                {children}
+                            </ArtistProvider>
                         </UserProvider>
                     </ThemeProvider>
                 </body>

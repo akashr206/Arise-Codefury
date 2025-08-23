@@ -9,7 +9,7 @@ export async function GET(req, { params }) {
 
         const { id } = params;
 
-        const user = await User.findOne({ username: id });
+        const user = await User.findOne({ $or: [{ username: id }, { id }] });
 
         if (!user) {
             return NextResponse.json(

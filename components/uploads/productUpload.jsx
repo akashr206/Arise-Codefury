@@ -14,6 +14,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { Upload, X, Image, Plus, Palette } from "lucide-react";
+import { useArtist } from "@/hooks/useArtist";
+import { useUser } from "@clerk/nextjs";
 
 export default function ProductUploadDialog({
     open,
@@ -44,6 +46,8 @@ export default function ProductUploadDialog({
     const [progress, setProgress] = useState(0);
     const [dragActive, setDragActive] = useState(false);
     const fileInputRef = useRef(null);
+    const { user } = useUser();
+    const { fetchUserData } = useArtist();
 
     const handleFileSelect = (selectedFiles) => {
         if (!selectedFiles || selectedFiles.length === 0) return;
@@ -240,6 +244,7 @@ export default function ProductUploadDialog({
 
             resetForm();
             onClose();
+            fetchUserData(user.id);
         } catch (error) {
             clearInterval(progressInterval);
             alert(error.message || "Upload failed");

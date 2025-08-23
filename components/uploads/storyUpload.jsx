@@ -14,8 +14,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { Upload, X, Image, Video, Plus } from "lucide-react";
+import { useArtist } from "@/hooks/useArtist";
+import { useUser } from "@clerk/nextjs";
 
-export default function UploadStoryDialog({ open, onClose }) {
+export default function UploadStoryDialog({ open, onClose, show = false }) {
     const [file, setFile] = useState(null);
     const [preview, setPreview] = useState(null);
     const [caption, setCaption] = useState("");
@@ -28,6 +30,8 @@ export default function UploadStoryDialog({ open, onClose }) {
     const [progress, setProgress] = useState(0);
     const [dragActive, setDragActive] = useState(false);
     const fileInputRef = useRef(null);
+    const { fetchUserData } = useArtist();
+    const { user } = useUser() || {};
 
     const handleFileSelect = (selectedFile) => {
         if (!selectedFile) return;
@@ -195,6 +199,7 @@ export default function UploadStoryDialog({ open, onClose }) {
             setTagInput("");
             setProgress(0);
             onClose();
+            fetchUserData(user.id);
         } catch (error) {
             clearInterval(progressInterval);
             alert(error.message || "Upload failed");
@@ -215,20 +220,22 @@ export default function UploadStoryDialog({ open, onClose }) {
 
     return (
         <Dialog open={open} onOpenChange={onClose}>
-            <DialogTrigger asChild>
-                <Button className="bg-gray-900 hover:bg-gray-800 text-white border-0 shadow-lg">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Create Story
-                </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl mt-10 px-0 bg-white/95 backdrop-blur-sm border-0 shadow-2xl">
+            {show && (
+                <DialogTrigger asChild>
+                    <Button variant={"outline"}>
+                        <Plus className="w-4 h-4 mr-2" />
+                        Create Story
+                    </Button>
+                </DialogTrigger>
+            )}
+            <DialogContent className="max-w-2xl px-0 max-h-[85vh] mt-12 overflow-y-auto bg-white/95 backdrop-blur-sm border-0 shadow-2xl">
                 <DialogHeader className="pb-4 px-6">
                     <DialogTitle className="text-2xl font-bold text-gray-900">
                         Create Your Story
                     </DialogTitle>
                 </DialogHeader>
 
-                <div className="space-y-6 px-6 max-h-[500px] overflow-y-auto">
+                <div className="space-y-6 px-6">
                     <div className="relative">
                         {!preview ? (
                             <div

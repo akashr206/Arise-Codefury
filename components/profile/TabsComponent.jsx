@@ -4,17 +4,37 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Eye, Heart, MessageCircle, ShoppingCart, Tag } from "lucide-react";
+import {
+    Eye,
+    Heart,
+    MessageCircle,
+    ShoppingCart,
+    Tag,
+    Edit,
+    Trash2,
+    MoreVertical,
+} from "lucide-react";
 import StoryDialog from "./StoryDialog";
 import ProductUploadDialog from "../uploads/productUpload";
 import UploadStoryDialog from "../uploads/storyUpload";
+import EditProductDialog from "./EditProductDialog";
+import EditStoryDialog from "./EditStoryDialog";
+import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
 import { Plus } from "lucide-react";
+import { useArtist } from "@/hooks/useArtist";
 
 function TabsComponent({ stories = [], products = [], artistId }) {
     const [selectedStory, setSelectedStory] = useState(null);
     const [storyDialogOpen, setStoryDialogOpen] = useState(false);
     const [productUpploadOpen, setProductUploadOpen] = useState(false);
     const [storyUploadOpen, setStoryUploadOpen] = useState(false);
+    const { fetchUserData } = useArtist();
+    const [editingProduct, setEditingProduct] = useState(null);
+    const [editingStory, setEditingStory] = useState(null);
+
+    const [deletingProduct, setDeletingProduct] = useState(null);
+    const [deletingStory, setDeletingStory] = useState(null);
+
     const { user } = useUser();
     const handleStoryClick = (story) => {
         setSelectedStory(story);
@@ -24,6 +44,87 @@ function TabsComponent({ stories = [], products = [], artistId }) {
     const handleCloseStory = () => {
         setStoryDialogOpen(false);
         setSelectedStory(null);
+    };
+
+    const handleEditProduct = (product) => {
+        setEditingProduct(product);
+    };
+
+    const handleEditStory = (story) => {
+        setEditingStory(story);
+    };
+
+    const handleProductUpdate = (updatedProduct) => {
+        const updatedProducts = products.map((p) =>
+            p._id === updatedProduct._id ? updatedProduct : p
+        );
+
+        setEditingProduct(null);
+    };
+
+    const handleStoryUpdate = (updatedStory) => {
+        const updatedStories = stories.map((s) =>
+            s._id === updatedStory._id ? updatedStory : s
+        );
+
+        setEditingStory(null);
+    };
+
+    const handleDeleteProduct = (product) => {
+        setDeletingProduct(product);
+    };
+
+    const handleDeleteStory = (story) => {
+        setDeletingStory(story);
+    };
+
+    const confirmDeleteProduct = async () => {
+        if (!deletingProduct) return;
+
+        try {
+            const response = await fetch(
+                `/api/products/${deletingProduct._id}`,
+                {
+                    method: "DELETE",
+                }
+            );
+
+            if (response.ok) {
+                const updatedProducts = products.filter(
+                    (p) => p._id !== deletingProduct._id
+                );
+                fetchUserData(id);
+                setDeletingProduct(null);
+            } else {
+                throw new Error("Failed to delete product");
+            }
+        } catch (error) {
+            console.error("Error deleting product:", error);
+            alert("Failed to delete product. Please try again.");
+        }
+    };
+
+    const confirmDeleteStory = async () => {
+        if (!deletingStory) return;
+
+        try {
+            const response = await fetch(`/api/stories/${deletingStory._id}`, {
+                method: "DELETE",
+            });
+
+            if (response.ok) {
+                const updatedStories = stories.filter(
+                    (s) => s._id !== deletingStory._id
+                );
+                fetchUserData(user.id);
+                setDeletingStory(null);
+            } else {
+                throw new Error("Failed to delete story");
+            }
+        } catch (error) {
+            console.error("Error deleting story:", error);
+            alert("Failed to delete story. Please try again.");
+        }
     };
 
     return (
@@ -44,14 +145,14 @@ function TabsComponent({ stories = [], products = [], artistId }) {
                 <TabsContent value="artworks" className="mt-6">
                     {products.length === 0 ? (
                         <div className="text-center py-12">
-                            <Tag className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                            <h3 className="text-lg font-medium text-gray-900 mb-2">
+                            <Tag className="w-16 h-16  mx-auto mb-4" />
+                            <h3 className="text-lg font-medium  mb-2">
                                 No Artworks Yet
                             </h3>
                             <p className="text-accent-foreground mb-2">
                                 This artist hasn't uploaded any artworks yet.
                             </p>
-                            {artistId === user.id && (
+                            {artistId === user?.id && (
                                 <ProductUploadDialog
                                     open={productUpploadOpen}
                                     onClose={setProductUploadOpen}
@@ -77,10 +178,47 @@ function TabsComponent({ stories = [], products = [], artistId }) {
                                         />
                                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-200" />
 
-                                        <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                        {}
+                                        {artistId === user?.id && (
+                                            <div className="absolute top-3 right-3 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 flex gap-2">
+                                                <Button
+                                                    size="sm"
+                                                    variant="secondary"
+                                                    className="bg-white/90 hover:bg-white text-gray-800 shadow-lg"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleEditProduct(
+                                                            product
+                                                        );
+                                                    }}
+                                                    title="Edit Artwork"
+                                                >
+                                                    <Edit className="w-4 h-4" />
+                                                </Button>
+                                                <Button
+                                                    size="sm"
+                                                    variant="secondary"
+                                                    className="bg-red-500/90 hover:bg-red-500 text-white shadow-lg"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleDeleteProduct(
+                                                            product
+                                                        );
+                                                    }}
+                                                    title="Delete Artwork"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </Button>
+                                            </div>
+                                        )}
+
+                                        {}
+                                        <div className="absolute top-3 left-3 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200">
                                             <Button
                                                 size="sm"
                                                 variant="secondary"
+                                                className="bg-white/90 hover:bg-white text-gray-800 shadow-lg"
+                                                title="View Artwork"
                                             >
                                                 <Eye className="w-4 h-4" />
                                             </Button>
@@ -138,26 +276,28 @@ function TabsComponent({ stories = [], products = [], artistId }) {
                                                     )}
                                                 </div>
                                             )}
-                                        <div className="flex gap-2">
-                                            <Button
-                                                size="sm"
-                                                className="flex-1 bg-primary hover:bg-primary/90"
-                                            >
-                                                <ShoppingCart className="w-4 h-4 mr-2" />
-                                                Buy Now
-                                            </Button>
-                                            <Button
-                                                size="sm"
-                                                variant="outline"
-                                                className="px-3"
-                                            >
-                                                <Heart className="w-4 h-4" />
-                                            </Button>
-                                        </div>
+                                        {artistId !== user?.id && (
+                                            <div className="flex gap-2">
+                                                <Button
+                                                    size="sm"
+                                                    className="flex-1 bg-primary hover:bg-primary/90"
+                                                >
+                                                    <ShoppingCart className="w-4 h-4 mr-2" />
+                                                    Buy Now
+                                                </Button>
+                                                <Button
+                                                    size="sm"
+                                                    variant="outline"
+                                                    className="px-3"
+                                                >
+                                                    <Heart className="w-4 h-4" />
+                                                </Button>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             ))}
-                            {artistId === user.id && (
+                            {artistId === user?.id && (
                                 <button
                                     onClick={() => setProductUploadOpen(true)}
                                     className="group bg-card rounded-xl flex flex-col gap-3 items-center justify-center shadow-sm border border-border border-dashed overflow-hidden hover:shadow-lg transition-all h- duration-200"
@@ -177,13 +317,18 @@ function TabsComponent({ stories = [], products = [], artistId }) {
                     ></UploadStoryDialog>
                     {stories.length === 0 ? (
                         <div className="text-center py-12">
-                            <Tag className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                            <h3 className="text-lg font-medium text-gray-900 mb-2">
+                            <Tag className="w-16 h-16  mx-auto mb-4" />
+                            <h3 className="text-lg font-medium mb-2">
                                 No Stories Yet
                             </h3>
-                            <p className="text-gray-500">
+                            <p className="text-acccent-foreground mb-2">
                                 This artist hasn't shared any stories yet.
                             </p>
+                            <UploadStoryDialog
+                                open={storyUploadOpen}
+                                onClose={setStoryUploadOpen}
+                                show={true}
+                            ></UploadStoryDialog>
                         </div>
                     ) : (
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 p-4">
@@ -193,7 +338,7 @@ function TabsComponent({ stories = [], products = [], artistId }) {
                                     className="relative aspect-[9/16] bg-black overflow-hidden rounded-lg cursor-pointer group hover:scale-105 transition-transform duration-200"
                                     onClick={() => handleStoryClick(story)}
                                 >
-                                    {/* Story Media */}
+                                    {}
                                     {story.mediaType === "video" ? (
                                         <video
                                             src={story.mediaUrl}
@@ -239,7 +384,7 @@ function TabsComponent({ stories = [], products = [], artistId }) {
                                         </div>
                                     </div>
 
-                                    <div className="absolute top-2 right-2">
+                                    <div className="absolute top-2 right-2 flex gap-1">
                                         <div className="w-6 h-6 bg-black/50 rounded-full flex items-center justify-center">
                                             {story.mediaType === "video" ? (
                                                 <div className="w-0 h-0 border-l-[6px] border-l-white border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent ml-0.5" />
@@ -247,10 +392,40 @@ function TabsComponent({ stories = [], products = [], artistId }) {
                                                 <div className="w-2 h-2 bg-white rounded-full" />
                                             )}
                                         </div>
+                                        {artistId === user?.id && (
+                                            <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-1">
+                                                <Button
+                                                    size="sm"
+                                                    variant="secondary"
+                                                    className="w-6 h-6 p-0 bg-blue-500/90 hover:bg-blue-500 text-white border-0 shadow-lg"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleEditStory(story);
+                                                    }}
+                                                    title="Edit Story"
+                                                >
+                                                    <Edit className="w-3 h-3" />
+                                                </Button>
+                                                <Button
+                                                    size="sm"
+                                                    variant="secondary"
+                                                    className="w-6 h-6 p-0 bg-red-500/90 hover:bg-red-500 text-white border-0 shadow-lg"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleDeleteStory(
+                                                            story
+                                                        );
+                                                    }}
+                                                    title="Delete Story"
+                                                >
+                                                    <Trash2 className="w-3 h-3" />
+                                                </Button>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             ))}
-                            {artistId === user.id && (
+                            {artistId === user?.id && (
                                 <button
                                     onClick={() => setStoryUploadOpen(true)}
                                     className="group bg-card rounded-xl flex flex-col gap-3 items-center justify-center shadow-sm border border-border border-dashed overflow-hidden hover:shadow-lg transition-all h- duration-200"
@@ -269,6 +444,48 @@ function TabsComponent({ stories = [], products = [], artistId }) {
                     story={selectedStory}
                     open={storyDialogOpen}
                     onOpenChange={handleCloseStory}
+                />
+            )}
+
+            {editingProduct && (
+                <EditProductDialog
+                    product={editingProduct}
+                    open={!!editingProduct}
+                    onClose={() => setEditingProduct(null)}
+                    onUpdate={handleProductUpdate}
+                />
+            )}
+
+            {editingStory && (
+                <EditStoryDialog
+                    story={editingStory}
+                    open={!!editingStory}
+                    onClose={() => setEditingStory(null)}
+                    onUpdate={handleStoryUpdate}
+                />
+            )}
+
+            {deletingProduct && (
+                <DeleteConfirmationDialog
+                    open={!!deletingProduct}
+                    onClose={() => setDeletingProduct(null)}
+                    onConfirm={confirmDeleteProduct}
+                    title="Delete Artwork"
+                    description="Are you sure you want to delete this artwork? This action cannot be undone."
+                    itemName={deletingProduct.title}
+                    deleting={false}
+                />
+            )}
+
+            {deletingStory && (
+                <DeleteConfirmationDialog
+                    open={!!deletingStory}
+                    onClose={() => setDeletingStory(null)}
+                    onConfirm={confirmDeleteStory}
+                    title="Delete Story"
+                    description="Are you sure you want to delete this story? This action cannot be undone."
+                    itemName={deletingStory.caption || "Story"}
+                    deleting={false}
                 />
             )}
         </div>
