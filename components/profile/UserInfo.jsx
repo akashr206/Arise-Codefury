@@ -21,11 +21,11 @@ export default function UserInfo({ artist }) {
         currentUser && currentUser.username === artist?.username;
 
     return (
-        <Card className="w-full shadow-none max-w-4xl mt-8 sm:mt-12 md:mt-16 lg:mt-20 mx-auto border-none px-4 sm:px-6">
+        <Card className="w-full shadow-none max-w-4xl mt-20  mx-auto border-none px-4 sm:px-6">
             <CardContent className="p-4 sm:p-6 md:p-8">
                 <div className="flex flex-col lg:flex-row gap-6 sm:gap-8 lg:gap-10">
                     <div className="flex flex-col sm:flex-row lg:flex-col gap-6 sm:gap-8 items-center lg:items-start">
-                        <div className="flex flex-col mx-auto gap-4 items-center lg:items-start">
+                        <div className="flex flex-col mx-auto gap-4 max-md:items-center lg:items-start">
                             <div className="flex-shrink-0">
                                 <Avatar className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 ring-2 sm:ring-4 ring-primary/20">
                                     <AvatarImage
@@ -115,7 +115,7 @@ export default function UserInfo({ artist }) {
 
                     <div className="flex items-center justify-center w-full">
                         <div className="flex-1 space-y-4 text-center lg:text-left">
-                            <div>
+                            <div className="flex  flex-col md:items-start items-center">
                                 <h1 className="text-2xl flex gap-2 items-center sm:text-3xl md:text-4xl font-bold text-foreground mb-2">
                                     {artist?.name}
                                     {artist?.isVerified && (

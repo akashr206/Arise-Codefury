@@ -42,11 +42,9 @@ const Navbar = () => {
             >
                 <div className="w-full  flex justify-between items-center">
                     <Link href={"/"} className="overflow-hidden rounded-md">
-                        <img
-                            src="/logo.png"
-                            alt="logo"
-                            className="h-10 w-auto"
-                        />
+                        <h2 className="font-bold text-xl tracking-wider">
+                            ARISE
+                        </h2>
                     </Link>
                     <nav>
                         <ul className="flex gap-5 max-md:hidden">
