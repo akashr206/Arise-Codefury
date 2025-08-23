@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth, currentUser, getAuth } from "@clerk/nextjs/server";
 import { connectMongoDB } from "@/lib/db";
+import User from "@/models/user";
 import Product from "@/models/product";
 
 export async function GET(req) {
@@ -66,5 +67,12 @@ export async function POST(req) {
                   user.emailAddresses[0]?.emailAddress ||
                   "Unknown Artist",
     });
+
+    const productCount = await Product.countDocuments({ artist: userId });
+
+    if (productCount >= 3) {
+        await User.findOneAndUpdate({ clerkId: userId }, { isVerified: true });
+    }
+
     return NextResponse.json(product, { status: 201 });
 }

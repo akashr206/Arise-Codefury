@@ -15,7 +15,6 @@ export const ArtistProvider = ({ id, children }) => {
     const fetchUserData = async (id = userId) => {
         try {
             setLoading(true);
-
             const userRes = await fetch(`/api/users/${id}`);
             if (!userRes.ok) {
                 if (userRes.status === 404) setError("User not found");
@@ -48,7 +47,7 @@ export const ArtistProvider = ({ id, children }) => {
     };
     useEffect(() => {
         if (!id) return;
-        fetchUserData();
+        fetchUserData(userId);
     }, [id, userId]);
 
     return (

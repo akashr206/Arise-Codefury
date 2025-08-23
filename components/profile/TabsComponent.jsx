@@ -21,13 +21,14 @@ import EditProductDialog from "./EditProductDialog";
 import EditStoryDialog from "./EditStoryDialog";
 import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
 import { Plus } from "lucide-react";
+import { useArtist } from "@/hooks/useArtist";
 
 function TabsComponent({ stories = [], products = [], artistId }) {
     const [selectedStory, setSelectedStory] = useState(null);
     const [storyDialogOpen, setStoryDialogOpen] = useState(false);
     const [productUpploadOpen, setProductUploadOpen] = useState(false);
     const [storyUploadOpen, setStoryUploadOpen] = useState(false);
-
+    const { fetchUserData } = useArtist();
     const [editingProduct, setEditingProduct] = useState(null);
     const [editingStory, setEditingStory] = useState(null);
 
@@ -92,7 +93,7 @@ function TabsComponent({ stories = [], products = [], artistId }) {
                 const updatedProducts = products.filter(
                     (p) => p._id !== deletingProduct._id
                 );
-
+                fetchUserData(id);
                 setDeletingProduct(null);
             } else {
                 throw new Error("Failed to delete product");
@@ -115,7 +116,7 @@ function TabsComponent({ stories = [], products = [], artistId }) {
                 const updatedStories = stories.filter(
                     (s) => s._id !== deletingStory._id
                 );
-
+                fetchUserData(user.id);
                 setDeletingStory(null);
             } else {
                 throw new Error("Failed to delete story");
@@ -275,22 +276,24 @@ function TabsComponent({ stories = [], products = [], artistId }) {
                                                     )}
                                                 </div>
                                             )}
-                                        <div className="flex gap-2">
-                                            <Button
-                                                size="sm"
-                                                className="flex-1 bg-primary hover:bg-primary/90"
-                                            >
-                                                <ShoppingCart className="w-4 h-4 mr-2" />
-                                                Buy Now
-                                            </Button>
-                                            <Button
-                                                size="sm"
-                                                variant="outline"
-                                                className="px-3"
-                                            >
-                                                <Heart className="w-4 h-4" />
-                                            </Button>
-                                        </div>
+                                        {artistId !== user?.id && (
+                                            <div className="flex gap-2">
+                                                <Button
+                                                    size="sm"
+                                                    className="flex-1 bg-primary hover:bg-primary/90"
+                                                >
+                                                    <ShoppingCart className="w-4 h-4 mr-2" />
+                                                    Buy Now
+                                                </Button>
+                                                <Button
+                                                    size="sm"
+                                                    variant="outline"
+                                                    className="px-3"
+                                                >
+                                                    <Heart className="w-4 h-4" />
+                                                </Button>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             ))}

@@ -15,11 +15,15 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { X, Edit3 } from "lucide-react";
+import { useArtist } from "@/hooks/useArtist";
+import { useUser } from "@clerk/nextjs";
 
 export default function EditUserDialog() {
     const { user, refreshUser } = useUserContext();
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const { fetchUserData } = useArtist();
+    const { user : userId } = useUser();
     const [formData, setFormData] = useState({
         name: "",
         username: "",
@@ -46,26 +50,31 @@ export default function EditUserDialog() {
     }, [user, open]);
 
     const handleInputChange = (field, value) => {
-        setFormData(prev => ({
+        setFormData((prev) => ({
             ...prev,
-            [field]: value
+            [field]: value,
         }));
     };
 
     const addCategory = () => {
-        if (newCategory.trim() && !formData.categories.includes(newCategory.trim())) {
-            setFormData(prev => ({
+        if (
+            newCategory.trim() &&
+            !formData.categories.includes(newCategory.trim())
+        ) {
+            setFormData((prev) => ({
                 ...prev,
-                categories: [...prev.categories, newCategory.trim()]
+                categories: [...prev.categories, newCategory.trim()],
             }));
             setNewCategory("");
         }
     };
 
     const removeCategory = (categoryToRemove) => {
-        setFormData(prev => ({
+        setFormData((prev) => ({
             ...prev,
-            categories: prev.categories.filter(cat => cat !== categoryToRemove)
+            categories: prev.categories.filter(
+                (cat) => cat !== categoryToRemove
+            ),
         }));
     };
 
@@ -91,11 +100,14 @@ export default function EditUserDialog() {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.message || "Failed to update profile");
+                throw new Error(
+                    errorData.message || "Failed to update profile"
+                );
             }
 
             await refreshUser();
             setOpen(false);
+            fetchUserData(userId.id);
         } catch (error) {
             console.error("Error updating profile:", error);
             alert(error.message || "Failed to update profile");
@@ -129,7 +141,9 @@ export default function EditUserDialog() {
                             </label>
                             <Input
                                 value={formData.name}
-                                onChange={(e) => handleInputChange("name", e.target.value)}
+                                onChange={(e) =>
+                                    handleInputChange("name", e.target.value)
+                                }
                                 placeholder="Enter your full name"
                                 required
                                 className="border-gray-200 focus:border-blue-400 focus:ring-blue-400"
@@ -142,7 +156,12 @@ export default function EditUserDialog() {
                             </label>
                             <Input
                                 value={formData.username}
-                                onChange={(e) => handleInputChange("username", e.target.value)}
+                                onChange={(e) =>
+                                    handleInputChange(
+                                        "username",
+                                        e.target.value
+                                    )
+                                }
                                 placeholder="Enter username"
                                 required
                                 className="border-gray-200 focus:border-blue-400 focus:ring-blue-400"
@@ -156,7 +175,9 @@ export default function EditUserDialog() {
                         </label>
                         <Textarea
                             value={formData.bio}
-                            onChange={(e) => handleInputChange("bio", e.target.value)}
+                            onChange={(e) =>
+                                handleInputChange("bio", e.target.value)
+                            }
                             placeholder="Tell us about yourself..."
                             rows={4}
                             className="border-gray-200 focus:border-blue-400 focus:ring-blue-400"
@@ -169,7 +190,9 @@ export default function EditUserDialog() {
                         </label>
                         <Input
                             value={formData.location}
-                            onChange={(e) => handleInputChange("location", e.target.value)}
+                            onChange={(e) =>
+                                handleInputChange("location", e.target.value)
+                            }
                             placeholder="City, Country"
                             className="border-gray-200 focus:border-blue-400 focus:ring-blue-400"
                         />
@@ -182,7 +205,12 @@ export default function EditUserDialog() {
                             </label>
                             <Input
                                 value={formData.instagram}
-                                onChange={(e) => handleInputChange("instagram", e.target.value)}
+                                onChange={(e) =>
+                                    handleInputChange(
+                                        "instagram",
+                                        e.target.value
+                                    )
+                                }
                                 placeholder="Instagram username"
                                 className="border-gray-200 focus:border-blue-400 focus:ring-blue-400"
                             />
@@ -194,7 +222,9 @@ export default function EditUserDialog() {
                             </label>
                             <Input
                                 value={formData.twitter}
-                                onChange={(e) => handleInputChange("twitter", e.target.value)}
+                                onChange={(e) =>
+                                    handleInputChange("twitter", e.target.value)
+                                }
                                 placeholder="Twitter username"
                                 className="border-gray-200 focus:border-blue-400 focus:ring-blue-400"
                             />
@@ -224,7 +254,11 @@ export default function EditUserDialog() {
                             ))}
                             <input
                                 type="text"
-                                placeholder={formData.categories.length === 0 ? "Add categories..." : ""}
+                                placeholder={
+                                    formData.categories.length === 0
+                                        ? "Add categories..."
+                                        : ""
+                                }
                                 value={newCategory}
                                 onChange={(e) => setNewCategory(e.target.value)}
                                 onKeyDown={handleKeyPress}

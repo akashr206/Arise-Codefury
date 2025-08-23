@@ -13,12 +13,16 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { X, Plus, Image, Video } from "lucide-react";
+import { useArtist } from "@/hooks/useArtist";
+import { useUser } from "@clerk/nextjs";
 
 export default function EditStoryDialog({ story, open, onClose, onUpdate }) {
     const [caption, setCaption] = useState("");
     const [tags, setTags] = useState([]);
     const [tagInput, setTagInput] = useState("");
     const [updating, setUpdating] = useState(false);
+    const { fetchUserData } = useArtist();
+    const { user } = useUser(user);
 
     useEffect(() => {
         if (story) {
@@ -35,13 +39,13 @@ export default function EditStoryDialog({ story, open, onClose, onUpdate }) {
     };
 
     const removeTag = (tagToRemove) => {
-        setTags(tags.filter(tag => tag !== tagToRemove));
+        setTags(tags.filter((tag) => tag !== tagToRemove));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setUpdating(true);
-        
+
         try {
             const response = await fetch(`/api/stories/${story._id}`, {
                 method: "PATCH",
@@ -58,6 +62,7 @@ export default function EditStoryDialog({ story, open, onClose, onUpdate }) {
                 const updatedStory = await response.json();
                 onUpdate(updatedStory);
                 onClose();
+                fetchUserData(user.id);
             } else {
                 throw new Error("Failed to update story");
             }
@@ -82,10 +87,12 @@ export default function EditStoryDialog({ story, open, onClose, onUpdate }) {
                 <DialogHeader>
                     <DialogTitle>Edit Story</DialogTitle>
                 </DialogHeader>
-                
+
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="space-y-2">
-                        <label className="text-sm font-medium">Story Preview</label>
+                        <label className="text-sm font-medium">
+                            Story Preview
+                        </label>
                         <div className="relative aspect-[1/1] bg-black overflow-hidden w-52 mx-auto rounded-lg">
                             {story?.mediaType === "video" ? (
                                 <video

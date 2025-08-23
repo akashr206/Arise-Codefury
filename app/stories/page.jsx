@@ -18,7 +18,7 @@ export default function StoryFeed() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const videoRefs = useRef({});
     const [isLoading, setIsLoading] = useState(true);
-    const [linkedProducts, setLinkedProducts] = useState([]);
+    const [linkedProducts, setLinkedProducts] = useState({});
 
     useEffect(() => {
         const fetchStories = async () => {
@@ -37,9 +37,12 @@ export default function StoryFeed() {
         fetchStories();
     }, []);
 
-    const fetchLinkedProducts = async (story) => {
+    const fetchLinkedProducts = async (storyIndex) => {
+        const story = stories[storyIndex];
+        console.log("Fetching linked products for story:", story);
+
         if (!story?.products || story.products.length === 0) {
-            setLinkedProducts([]);
+            setLinkedProducts((prev) => ({ ...prev, [storyIndex]: [] }));
             return;
         }
 
@@ -51,21 +54,20 @@ export default function StoryFeed() {
             });
 
             const products = await Promise.all(productPromises);
-            setLinkedProducts(products.filter(Boolean));
+            setLinkedProducts((prev) => ({
+                ...prev,
+                [storyIndex]: products.filter(Boolean),
+            }));
         } catch (err) {
             console.error("Error fetching linked products:", err);
-            setLinkedProducts([]);
+            setLinkedProducts((prev) => ({ ...prev, [storyIndex]: [] }));
         }
     };
-
-    useEffect(() => {
-        if (!stories.length) return;
-        fetchLinkedProducts(stories[currentIndex]);
-    }, [stories, currentIndex]);
 
     const handleProductClick = (product) => {
         console.log("Clicked product:", product);
     };
+
     useEffect(() => {
         const handleScroll = () => {
             const container = document.querySelector(".story-container");
@@ -74,9 +76,11 @@ export default function StoryFeed() {
             const scrollTop = container.scrollTop;
             const itemHeight = window.innerHeight;
             const newIndex = Math.round(scrollTop / itemHeight);
+            console.log(newIndex);
 
             if (newIndex !== currentIndex) {
                 setCurrentIndex(newIndex);
+                fetchLinkedProducts(newIndex);
             }
         };
 
@@ -85,7 +89,7 @@ export default function StoryFeed() {
             container.addEventListener("scroll", handleScroll);
             return () => container.removeEventListener("scroll", handleScroll);
         }
-    }, [currentIndex]);
+    }, [currentIndex, stories]);
 
     useEffect(() => {
         Object.keys(videoRefs.current).forEach((key, index) => {
@@ -104,6 +108,14 @@ export default function StoryFeed() {
         document.body.style.overflow = "hidden";
         return () => (document.body.style.overflow = "auto");
     }, []);
+
+    // Fetch products for the first story when stories are loaded
+    useEffect(() => {
+        if (stories.length > 0 && currentIndex === 0) {
+            fetchLinkedProducts(0);
+        }
+    }, [stories]);
+
     if (!stories.length) {
         return (
             <div className="flex flex-col h-screen items-center justify-center">
@@ -194,80 +206,84 @@ export default function StoryFeed() {
                                             <span className="font-semibold text-white">
                                                 {story.authorName}
                                             </span>
-                                            <span className="text-xs text-accent">
+                                            <span className="text-xs text-white/70">
                                                 @{story.authorUsername}
                                             </span>
                                         </div>
                                     </div>
                                 </Link>
                                 {story.caption && (
-                                    <p className="text-sm text-accent leading-relaxed">
+                                    <p className="text-sm text-white/70 leading-relaxed">
                                         {story.caption}
                                     </p>
                                 )}
                             </div>
                             <div>
-                                {linkedProducts.length > 0 && (
-                                    <>
-                                        
-                                        <div className="flex gap-3 overflow-x-auto pb-2">
-                                            {linkedProducts.map((product) => (
-                                                <Link
-                                                    key={product._id}
-                                                    href={`/artworks/${product._id}`}
-                                                    className="flex-shrink-0 bg-white/10 backdrop-blur-sm rounded-lg p-3 min-w-[200px] border border-white/20 hover:bg-white/20 transition-colors duration-200 cursor-pointer"
-                                                    onClick={() =>
-                                                        handleProductClick(
-                                                            product
-                                                        )
-                                                    }
-                                                >
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="w-12 h-12 rounded-lg overflow-hidden bg-white/20">
-                                                            <img
-                                                                src={
+                                {linkedProducts[idx] &&
+                                    linkedProducts[idx].length > 0 && (
+                                        <>
+                                            <div className="flex gap-3 overflow-x-auto pb-2">
+                                                {linkedProducts[idx].map(
+                                                    (product) => (
+                                                        <Link
+                                                            key={product._id}
+                                                            href={`/artworks/${product._id}`}
+                                                            className="flex-shrink-0 bg-white/10 backdrop-blur-sm rounded-lg p-3 min-w-[200px] border border-white/20 hover:bg-white/20 transition-colors duration-200 cursor-pointer"
+                                                            onClick={() =>
+                                                                handleProductClick(
                                                                     product
-                                                                        .images?.[0] ||
-                                                                    "/placeholder.svg"
-                                                                }
-                                                                alt={
-                                                                    product.title
-                                                                }
-                                                                className="w-full h-full object-cover"
-                                                            />
-                                                        </div>
-                                                        <div className="flex-1 min-w-0">
-                                                            <p className="text-white font-medium text-sm truncate">
-                                                                {product.title}
-                                                            </p>
-                                                            <p className="text-white/70 text-xs truncate">
-                                                                ₹
-                                                                {product.price?.toLocaleString()}
-                                                            </p>
-                                                            {product.medium && (
-                                                                <Badge
-                                                                    variant="secondary"
-                                                                    className="mt-1 text-xs bg-white/20 text-white border-white/30"
-                                                                >
-                                                                    {
-                                                                        product.medium
-                                                                    }
-                                                                </Badge>
-                                                            )}
-                                                        </div>
-                                                        <Button
-                                                            size="sm"
-                                                            variant="ghost"
-                                                            className="text-white hover:bg-white/20 p-1"
+                                                                )
+                                                            }
                                                         >
-                                                            <ExternalLink className="w-4 h-4" />
-                                                        </Button>
-                                                    </div>
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    </>
-                                )}
+                                                            <div className="flex items-center gap-3">
+                                                                <div className="w-12 h-12 rounded-lg overflow-hidden bg-white/20">
+                                                                    <img
+                                                                        src={
+                                                                            product
+                                                                                .images?.[0] ||
+                                                                            "/placeholder.svg"
+                                                                        }
+                                                                        alt={
+                                                                            product.title
+                                                                        }
+                                                                        className="w-full h-full object-cover"
+                                                                    />
+                                                                </div>
+                                                                <div className="flex-1 min-w-0">
+                                                                    <p className="text-white font-medium text-sm truncate">
+                                                                        {
+                                                                            product.title
+                                                                        }
+                                                                    </p>
+                                                                    <p className="text-white/70 text-xs truncate">
+                                                                        ₹
+                                                                        {product.price?.toLocaleString()}
+                                                                    </p>
+                                                                    {product.medium && (
+                                                                        <Badge
+                                                                            variant="secondary"
+                                                                            className="mt-1 text-xs bg-white/20 text-white border-white/30"
+                                                                        >
+                                                                            {
+                                                                                product.medium
+                                                                            }
+                                                                        </Badge>
+                                                                    )}
+                                                                </div>
+                                                                <Button
+                                                                    size="sm"
+                                                                    variant="ghost"
+                                                                    className="text-white hover:bg-white/20 p-1"
+                                                                >
+                                                                    <ExternalLink className="w-4 h-4" />
+                                                                </Button>
+                                                            </div>
+                                                        </Link>
+                                                    )
+                                                )}
+                                            </div>
+                                        </>
+                                    )}
                             </div>
                         </div>
                     </div>

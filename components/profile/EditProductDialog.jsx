@@ -13,8 +13,15 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { X, Plus, Palette } from "lucide-react";
+import { useArtist } from "@/hooks/useArtist";
+import { useUser } from "@clerk/nextjs";
 
-export default function EditProductDialog({ product, open, onClose, onUpdate }) {
+export default function EditProductDialog({
+    product,
+    open,
+    onClose,
+    onUpdate,
+}) {
     const [formData, setFormData] = useState({
         title: "",
         description: "",
@@ -34,6 +41,8 @@ export default function EditProductDialog({ product, open, onClose, onUpdate }) 
     const [tags, setTags] = useState([]);
     const [tagInput, setTagInput] = useState("");
     const [updating, setUpdating] = useState(false);
+    const { fetchUserData } = useArtist();
+    const { user } = useUser();
 
     useEffect(() => {
         if (product) {
@@ -60,15 +69,15 @@ export default function EditProductDialog({ product, open, onClose, onUpdate }) 
     const handleInputChange = (field, value) => {
         if (field.includes(".")) {
             const [parent, child] = field.split(".");
-            setFormData(prev => ({
+            setFormData((prev) => ({
                 ...prev,
                 [parent]: {
                     ...prev[parent],
-                    [child]: value
-                }
+                    [child]: value,
+                },
             }));
         } else {
-            setFormData(prev => ({ ...prev, [field]: value }));
+            setFormData((prev) => ({ ...prev, [field]: value }));
         }
     };
 
@@ -80,13 +89,13 @@ export default function EditProductDialog({ product, open, onClose, onUpdate }) 
     };
 
     const removeTag = (tagToRemove) => {
-        setTags(tags.filter(tag => tag !== tagToRemove));
+        setTags(tags.filter((tag) => tag !== tagToRemove));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setUpdating(true);
-        
+
         try {
             const response = await fetch(`/api/products/${product._id}`, {
                 method: "PATCH",
@@ -105,6 +114,9 @@ export default function EditProductDialog({ product, open, onClose, onUpdate }) 
                 const updatedProduct = await response.json();
                 onUpdate(updatedProduct);
                 onClose();
+                console.log("user in edit product dialog:", user);
+                
+                fetchUserData(user.id);
             } else {
                 throw new Error("Failed to update product");
             }
@@ -129,25 +141,33 @@ export default function EditProductDialog({ product, open, onClose, onUpdate }) 
                 <DialogHeader>
                     <DialogTitle>Edit Artwork</DialogTitle>
                 </DialogHeader>
-                
+
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <label className="text-sm font-medium">Title *</label>
+                            <label className="text-sm font-medium">
+                                Title *
+                            </label>
                             <Input
                                 value={formData.title}
-                                onChange={(e) => handleInputChange("title", e.target.value)}
+                                onChange={(e) =>
+                                    handleInputChange("title", e.target.value)
+                                }
                                 placeholder="Artwork title"
                                 required
                             />
                         </div>
-                        
+
                         <div className="space-y-2">
-                            <label className="text-sm font-medium">Price (₹) *</label>
+                            <label className="text-sm font-medium">
+                                Price (₹) *
+                            </label>
                             <Input
                                 type="number"
                                 value={formData.price}
-                                onChange={(e) => handleInputChange("price", e.target.value)}
+                                onChange={(e) =>
+                                    handleInputChange("price", e.target.value)
+                                }
                                 placeholder="0.00"
                                 min="0"
                                 step="0.01"
@@ -157,10 +177,14 @@ export default function EditProductDialog({ product, open, onClose, onUpdate }) 
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium">Description</label>
+                        <label className="text-sm font-medium">
+                            Description
+                        </label>
                         <Textarea
                             value={formData.description}
-                            onChange={(e) => handleInputChange("description", e.target.value)}
+                            onChange={(e) =>
+                                handleInputChange("description", e.target.value)
+                            }
                             placeholder="Describe your artwork..."
                             rows={3}
                         />
@@ -168,31 +192,44 @@ export default function EditProductDialog({ product, open, onClose, onUpdate }) 
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="space-y-2">
-                            <label className="text-sm font-medium">Medium</label>
+                            <label className="text-sm font-medium">
+                                Medium
+                            </label>
                             <Input
                                 value={formData.medium}
-                                onChange={(e) => handleInputChange("medium", e.target.value)}
+                                onChange={(e) =>
+                                    handleInputChange("medium", e.target.value)
+                                }
                                 placeholder="e.g., Oil on Canvas"
                             />
                         </div>
-                        
+
                         <div className="space-y-2">
                             <label className="text-sm font-medium">Year</label>
                             <Input
                                 type="number"
                                 value={formData.year}
-                                onChange={(e) => handleInputChange("year", e.target.value)}
+                                onChange={(e) =>
+                                    handleInputChange("year", e.target.value)
+                                }
                                 placeholder="2024"
                                 min="1900"
                                 max="2030"
                             />
                         </div>
-                        
+
                         <div className="space-y-2">
-                            <label className="text-sm font-medium">Category</label>
+                            <label className="text-sm font-medium">
+                                Category
+                            </label>
                             <Input
                                 value={formData.category}
-                                onChange={(e) => handleInputChange("category", e.target.value)}
+                                onChange={(e) =>
+                                    handleInputChange(
+                                        "category",
+                                        e.target.value
+                                    )
+                                }
                                 placeholder="e.g., Abstract"
                             />
                         </div>
@@ -202,17 +239,26 @@ export default function EditProductDialog({ product, open, onClose, onUpdate }) 
                         <label className="text-sm font-medium">Location</label>
                         <Input
                             value={formData.location}
-                            onChange={(e) => handleInputChange("location", e.target.value)}
+                            onChange={(e) =>
+                                handleInputChange("location", e.target.value)
+                            }
                             placeholder="e.g., Mumbai, India"
                         />
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium">Dimensions</label>
+                        <label className="text-sm font-medium">
+                            Dimensions
+                        </label>
                         <div className="grid grid-cols-4 gap-2">
                             <Input
                                 value={formData.dimensions.width}
-                                onChange={(e) => handleInputChange("dimensions.width", e.target.value)}
+                                onChange={(e) =>
+                                    handleInputChange(
+                                        "dimensions.width",
+                                        e.target.value
+                                    )
+                                }
                                 placeholder="Width"
                                 type="number"
                                 min="0"
@@ -220,7 +266,12 @@ export default function EditProductDialog({ product, open, onClose, onUpdate }) 
                             />
                             <Input
                                 value={formData.dimensions.height}
-                                onChange={(e) => handleInputChange("dimensions.height", e.target.value)}
+                                onChange={(e) =>
+                                    handleInputChange(
+                                        "dimensions.height",
+                                        e.target.value
+                                    )
+                                }
                                 placeholder="Height"
                                 type="number"
                                 min="0"
@@ -228,7 +279,12 @@ export default function EditProductDialog({ product, open, onClose, onUpdate }) 
                             />
                             <Input
                                 value={formData.dimensions.depth}
-                                onChange={(e) => handleInputChange("dimensions.depth", e.target.value)}
+                                onChange={(e) =>
+                                    handleInputChange(
+                                        "dimensions.depth",
+                                        e.target.value
+                                    )
+                                }
                                 placeholder="Depth"
                                 type="number"
                                 min="0"
@@ -236,7 +292,12 @@ export default function EditProductDialog({ product, open, onClose, onUpdate }) 
                             />
                             <select
                                 value={formData.dimensions.unit}
-                                onChange={(e) => handleInputChange("dimensions.unit", e.target.value)}
+                                onChange={(e) =>
+                                    handleInputChange(
+                                        "dimensions.unit",
+                                        e.target.value
+                                    )
+                                }
                                 className="px-3 py-2 border border-input rounded-md bg-background text-sm"
                             >
                                 <option value="cm">cm</option>
@@ -292,10 +353,15 @@ export default function EditProductDialog({ product, open, onClose, onUpdate }) 
                             type="checkbox"
                             id="isFramed"
                             checked={formData.isFramed}
-                            onChange={(e) => handleInputChange("isFramed", e.target.checked)}
+                            onChange={(e) =>
+                                handleInputChange("isFramed", e.target.checked)
+                            }
                             className="rounded border-gray-300"
                         />
-                        <label htmlFor="isFramed" className="text-sm font-medium">
+                        <label
+                            htmlFor="isFramed"
+                            className="text-sm font-medium"
+                        >
                             Artwork is framed
                         </label>
                     </div>

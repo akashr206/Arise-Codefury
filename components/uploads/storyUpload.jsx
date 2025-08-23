@@ -14,6 +14,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { Upload, X, Image, Video, Plus } from "lucide-react";
+import { useArtist } from "@/hooks/useArtist";
+import { useUser } from "@clerk/nextjs";
 
 export default function UploadStoryDialog({ open, onClose, show = false }) {
     const [file, setFile] = useState(null);
@@ -28,6 +30,8 @@ export default function UploadStoryDialog({ open, onClose, show = false }) {
     const [progress, setProgress] = useState(0);
     const [dragActive, setDragActive] = useState(false);
     const fileInputRef = useRef(null);
+    const { fetchUserData } = useArtist();
+    const { user } = useUser() || {};
 
     const handleFileSelect = (selectedFile) => {
         if (!selectedFile) return;
@@ -195,6 +199,7 @@ export default function UploadStoryDialog({ open, onClose, show = false }) {
             setTagInput("");
             setProgress(0);
             onClose();
+            fetchUserData(user.id);
         } catch (error) {
             clearInterval(progressInterval);
             alert(error.message || "Upload failed");
