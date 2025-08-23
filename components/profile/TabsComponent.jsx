@@ -90,14 +90,9 @@ function TabsComponent({ stories = [], products = [], artistId }) {
             );
 
             if (response.ok) {
-                const updatedProducts = products.filter(
-                    (p) => p._id !== deletingProduct._id
-                );
                 fetchUserData(id);
                 setDeletingProduct(null);
-            } else {
-                throw new Error("Failed to delete product");
-            }
+            } 
         } catch (error) {
             console.error("Error deleting product:", error);
             alert("Failed to delete product. Please try again.");
@@ -113,9 +108,6 @@ function TabsComponent({ stories = [], products = [], artistId }) {
             });
 
             if (response.ok) {
-                const updatedStories = stories.filter(
-                    (s) => s._id !== deletingStory._id
-                );
                 fetchUserData(user.id);
                 setDeletingStory(null);
             } else {

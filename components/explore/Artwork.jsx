@@ -119,7 +119,7 @@ export default function Artwork({ artwork, onBack }) {
                                 </div>
 
                                 {isZooming && (
-                                    <div className="absolute top-0 left-full ml-4 w-64 h-64 bg-white rounded-2xl shadow-2xl border-2 border-primary/20 overflow-hidden z-10 animate-in fade-in-0 zoom-in-95 duration-200">
+                                    <div className="absolute top-0 left-full ml-4 w-64 h-64  z-[9999] rounded-2xl shadow-2xl border-2 border-primary/20 overflow-hidden animate-in fade-in-0 zoom-in-95 duration-200">
                                         <div
                                             className="w-full h-full bg-cover bg-no-repeat"
                                             style={{
@@ -225,20 +225,22 @@ export default function Artwork({ artwork, onBack }) {
                         <Card className="border-primary/20 shadow-lg hover:shadow-primary/10 transition-all duration-300 glow-effect">
                             <CardContent>
                                 <div className="flex items-start gap-4">
-                                    <Avatar className="w-16 h-16 border-2 border-primary/20">
-                                        <AvatarImage
-                                            src={
-                                                product.artistProfile ||
-                                                "/placeholder.svg"
-                                            }
-                                        />
-                                        <AvatarFallback className="bg-primary/10 text-primary">
+                                    <div className="w-16 h-16 border-2 overflow-hidden rounded-full border-primary/20">
+                                        {product.artistProfile && (
+                                            <img
+                                                src={
+                                                    product.artistProfile ||
+                                                    "/placeholder.svg"
+                                                }
+                                            />
+                                        )}
+                                        <div className="bg-primary/10 text-primary">
                                             {product.artistName
                                                 ?.split(" ")
                                                 .map((n) => n[0])
                                                 .join("") || "A"}
-                                        </AvatarFallback>
-                                    </Avatar>
+                                        </div>
+                                    </div>
                                     <div className="flex-1 space-y-2">
                                         <div className="flex items-center gap-2">
                                             <h3 className="text-xl font-semibold">

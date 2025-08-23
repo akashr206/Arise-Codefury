@@ -252,7 +252,7 @@ export default function Shop() {
                                         </div>
 
                                         <div className="text-lg font-bold mb-2">
-                                            ${product.price.toFixed(2)}
+                                            ₹{product.price.toFixed(2)}
                                         </div>
                                     </CardContent>
                                     <CardFooter className="p-4 pt-0 flex justify-between items-center">

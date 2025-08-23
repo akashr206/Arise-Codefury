@@ -134,7 +134,7 @@ export default function Feeds({ stories = [], products = [] }) {
 
                         {feed.type === "product" && (
                             <div className="absolute bottom-3 left-3 bg-black/60 px-2 py-1 rounded-md text-xs text-white">
-                                ${feed.price}
+                                ₹{feed.price}
                             </div>
                         )}
 
