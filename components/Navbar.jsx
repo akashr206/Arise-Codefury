@@ -62,7 +62,7 @@ const Navbar = () => {
                     </nav>
                     <div className="flex items-center gap-2 justify-center">
                         <ThemeToggle></ThemeToggle>
-                        <div className="max-md:hidden">
+                        <div >
                             <UserActions></UserActions>
                         </div>
                         <button
