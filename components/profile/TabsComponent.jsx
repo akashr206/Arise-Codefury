@@ -4,7 +4,16 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Eye, Heart, MessageCircle, ShoppingCart, Tag, Edit, Trash2, MoreVertical } from "lucide-react";
+import {
+    Eye,
+    Heart,
+    MessageCircle,
+    ShoppingCart,
+    Tag,
+    Edit,
+    Trash2,
+    MoreVertical,
+} from "lucide-react";
 import StoryDialog from "./StoryDialog";
 import ProductUploadDialog from "../uploads/productUpload";
 import UploadStoryDialog from "../uploads/storyUpload";
@@ -18,15 +27,13 @@ function TabsComponent({ stories = [], products = [], artistId }) {
     const [storyDialogOpen, setStoryDialogOpen] = useState(false);
     const [productUpploadOpen, setProductUploadOpen] = useState(false);
     const [storyUploadOpen, setStoryUploadOpen] = useState(false);
-    
-    // Edit states
+
     const [editingProduct, setEditingProduct] = useState(null);
     const [editingStory, setEditingStory] = useState(null);
-    
-    // Delete states
+
     const [deletingProduct, setDeletingProduct] = useState(null);
     const [deletingStory, setDeletingStory] = useState(null);
-    
+
     const { user } = useUser();
     const handleStoryClick = (story) => {
         setSelectedStory(story);
@@ -38,7 +45,6 @@ function TabsComponent({ stories = [], products = [], artistId }) {
         setSelectedStory(null);
     };
 
-    // Edit handlers
     const handleEditProduct = (product) => {
         setEditingProduct(product);
     };
@@ -48,26 +54,21 @@ function TabsComponent({ stories = [], products = [], artistId }) {
     };
 
     const handleProductUpdate = (updatedProduct) => {
-        // Update the product in the local state
-        const updatedProducts = products.map(p => 
+        const updatedProducts = products.map((p) =>
             p._id === updatedProduct._id ? updatedProduct : p
         );
-        // You might want to call a parent function to update the state
-        // For now, we'll just close the dialog
+
         setEditingProduct(null);
     };
 
     const handleStoryUpdate = (updatedStory) => {
-        // Update the story in the local state
-        const updatedStories = stories.map(s => 
+        const updatedStories = stories.map((s) =>
             s._id === updatedStory._id ? updatedStory : s
         );
-        // You might want to call a parent function to update the state
-        // For now, we'll just close the dialog
+
         setEditingStory(null);
     };
 
-    // Delete handlers
     const handleDeleteProduct = (product) => {
         setDeletingProduct(product);
     };
@@ -78,16 +79,20 @@ function TabsComponent({ stories = [], products = [], artistId }) {
 
     const confirmDeleteProduct = async () => {
         if (!deletingProduct) return;
-        
+
         try {
-            const response = await fetch(`/api/products/${deletingProduct._id}`, {
-                method: "DELETE",
-            });
+            const response = await fetch(
+                `/api/products/${deletingProduct._id}`,
+                {
+                    method: "DELETE",
+                }
+            );
 
             if (response.ok) {
-                // Remove the product from local state
-                const updatedProducts = products.filter(p => p._id !== deletingProduct._id);
-                // You might want to call a parent function to update the state
+                const updatedProducts = products.filter(
+                    (p) => p._id !== deletingProduct._id
+                );
+
                 setDeletingProduct(null);
             } else {
                 throw new Error("Failed to delete product");
@@ -100,16 +105,17 @@ function TabsComponent({ stories = [], products = [], artistId }) {
 
     const confirmDeleteStory = async () => {
         if (!deletingStory) return;
-        
+
         try {
             const response = await fetch(`/api/stories/${deletingStory._id}`, {
                 method: "DELETE",
             });
 
             if (response.ok) {
-                // Remove the story from local state
-                const updatedStories = stories.filter(s => s._id !== deletingStory._id);
-                // You might want to call a parent function to update the state
+                const updatedStories = stories.filter(
+                    (s) => s._id !== deletingStory._id
+                );
+
                 setDeletingStory(null);
             } else {
                 throw new Error("Failed to delete story");
@@ -138,8 +144,8 @@ function TabsComponent({ stories = [], products = [], artistId }) {
                 <TabsContent value="artworks" className="mt-6">
                     {products.length === 0 ? (
                         <div className="text-center py-12">
-                            <Tag className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                            <h3 className="text-lg font-medium text-gray-900 mb-2">
+                            <Tag className="w-16 h-16  mx-auto mb-4" />
+                            <h3 className="text-lg font-medium  mb-2">
                                 No Artworks Yet
                             </h3>
                             <p className="text-accent-foreground mb-2">
@@ -171,7 +177,7 @@ function TabsComponent({ stories = [], products = [], artistId }) {
                                         />
                                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-200" />
 
-                                        {/* Action buttons - only show for the owner */}
+                                        {}
                                         {artistId === user?.id && (
                                             <div className="absolute top-3 right-3 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 flex gap-2">
                                                 <Button
@@ -180,7 +186,9 @@ function TabsComponent({ stories = [], products = [], artistId }) {
                                                     className="bg-white/90 hover:bg-white text-gray-800 shadow-lg"
                                                     onClick={(e) => {
                                                         e.stopPropagation();
-                                                        handleEditProduct(product);
+                                                        handleEditProduct(
+                                                            product
+                                                        );
                                                     }}
                                                     title="Edit Artwork"
                                                 >
@@ -192,7 +200,9 @@ function TabsComponent({ stories = [], products = [], artistId }) {
                                                     className="bg-red-500/90 hover:bg-red-500 text-white shadow-lg"
                                                     onClick={(e) => {
                                                         e.stopPropagation();
-                                                        handleDeleteProduct(product);
+                                                        handleDeleteProduct(
+                                                            product
+                                                        );
                                                     }}
                                                     title="Delete Artwork"
                                                 >
@@ -200,8 +210,8 @@ function TabsComponent({ stories = [], products = [], artistId }) {
                                                 </Button>
                                             </div>
                                         )}
-                                        
-                                        {/* View button - always visible on hover on desktop, always visible on mobile */}
+
+                                        {}
                                         <div className="absolute top-3 left-3 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200">
                                             <Button
                                                 size="sm"
@@ -304,11 +314,11 @@ function TabsComponent({ stories = [], products = [], artistId }) {
                     ></UploadStoryDialog>
                     {stories.length === 0 ? (
                         <div className="text-center py-12">
-                            <Tag className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                            <h3 className="text-lg font-medium text-gray-900 mb-2">
+                            <Tag className="w-16 h-16  mx-auto mb-4" />
+                            <h3 className="text-lg font-medium mb-2">
                                 No Stories Yet
                             </h3>
-                            <p className="text-gray-500">
+                            <p className="text-acccent-foreground mb-2">
                                 This artist hasn't shared any stories yet.
                             </p>
                             <UploadStoryDialog
@@ -325,7 +335,7 @@ function TabsComponent({ stories = [], products = [], artistId }) {
                                     className="relative aspect-[9/16] bg-black overflow-hidden rounded-lg cursor-pointer group hover:scale-105 transition-transform duration-200"
                                     onClick={() => handleStoryClick(story)}
                                 >
-                                    {/* Story Media */}
+                                    {}
                                     {story.mediaType === "video" ? (
                                         <video
                                             src={story.mediaUrl}
@@ -399,7 +409,9 @@ function TabsComponent({ stories = [], products = [], artistId }) {
                                                     className="w-6 h-6 p-0 bg-red-500/90 hover:bg-red-500 text-white border-0 shadow-lg"
                                                     onClick={(e) => {
                                                         e.stopPropagation();
-                                                        handleDeleteStory(story);
+                                                        handleDeleteStory(
+                                                            story
+                                                        );
                                                     }}
                                                     title="Delete Story"
                                                 >

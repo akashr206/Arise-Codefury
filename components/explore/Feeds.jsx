@@ -3,7 +3,8 @@ import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Play } from "lucide-react";
 import StoryDialog from "@/components/profile/StoryDialog";
-import { shuffleArray } from "@/lib/utils";
+import { cn, shuffleArray } from "@/lib/utils";
+import { ExternalLink } from "lucide-react";
 
 export default function Feeds({ stories = [], products = [] }) {
     const router = useRouter();
@@ -88,7 +89,9 @@ export default function Feeds({ stories = [], products = [] }) {
                 {combinedFeeds.map((feed) => (
                     <div
                         key={feed.id}
-                        className="relative mb-4 break-inside-avoid cursor-pointer overflow-hidden rounded-xl shadow hover:shadow-lg transition"
+                        className={cn(
+                            "relative mb-4 group break-inside-avoid cursor-pointer overflow-hidden rounded-xl shadow hover:shadow-lg transition"
+                        )}
                         onClick={() => handleFeedClick(feed)}
                     >
                         {feed.mediaType === "video" ? (
@@ -115,6 +118,15 @@ export default function Feeds({ stories = [], products = [] }) {
                             </div>
                         )}
 
+                        {feed.type === "story" && (
+                            <div className="absolute bottom-3 left-3 bg-black/60 px-2 py-1 rounded-md text-xs text-white">
+                                {feed.authorName}
+                            </div>
+                        )}
+                        {feed.type === "product" && (
+                            <div className="absolute inset-0 z-[99999] bg-transparent group-hover:bg-black/70 group-hover:backdrop-blur-md transition-all px-2 py-1 flex items-center justify-center rounded-md"> <ExternalLink className="group-hover:text-white text-transparent transition-all "></ExternalLink></div>
+                        )}
+
                         {feed.type === "product" && (
                             <div className="absolute bottom-3 left-3 bg-black/60 px-2 py-1 rounded-md text-xs text-white">
                                 ${feed.price}
@@ -130,13 +142,13 @@ export default function Feeds({ stories = [], products = [] }) {
                 ))}
             </div>
 
-                         {activereel && (
-                 <StoryDialog
-                     story={activereel}
-                     open={!!activereel}
-                     onOpenChange={(open) => !open && setActivereel(null)}
-                 />
-             )}
+            {activereel && (
+                <StoryDialog
+                    story={activereel}
+                    open={!!activereel}
+                    onOpenChange={(open) => !open && setActivereel(null)}
+                />
+            )}
         </div>
     );
 }

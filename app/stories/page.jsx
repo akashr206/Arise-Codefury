@@ -1,7 +1,9 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, ExternalLink } from "lucide-react";
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 function shuffleArray(arr) {
     const array = [...arr];
     for (let i = array.length - 1; i > 0; i--) {
@@ -16,15 +18,15 @@ export default function StoryFeed() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const videoRefs = useRef({});
     const [isLoading, setIsLoading] = useState(true);
+    const [linkedProducts, setLinkedProducts] = useState([]);
 
     useEffect(() => {
         const fetchStories = async () => {
             try {
                 const res = await fetch("/api/stories/all");
                 let data = await res.json();
-
-                console.log(data);
                 data = shuffleArray(data.stories);
+                console.log(data);
 
                 setStories(data);
             } catch (err) {
@@ -35,6 +37,35 @@ export default function StoryFeed() {
         fetchStories();
     }, []);
 
+    const fetchLinkedProducts = async (story) => {
+        if (!story?.products || story.products.length === 0) {
+            setLinkedProducts([]);
+            return;
+        }
+
+        try {
+            const productPromises = story.products.map(async (productId) => {
+                const response = await fetch(`/api/products/${productId}`);
+                if (response.ok) return await response.json();
+                return null;
+            });
+
+            const products = await Promise.all(productPromises);
+            setLinkedProducts(products.filter(Boolean));
+        } catch (err) {
+            console.error("Error fetching linked products:", err);
+            setLinkedProducts([]);
+        }
+    };
+
+    useEffect(() => {
+        if (!stories.length) return;
+        fetchLinkedProducts(stories[currentIndex]);
+    }, [stories, currentIndex]);
+
+    const handleProductClick = (product) => {
+        console.log("Clicked product:", product);
+    };
     useEffect(() => {
         const handleScroll = () => {
             const container = document.querySelector(".story-container");
@@ -133,45 +164,113 @@ export default function StoryFeed() {
                             </div>
                         )}
                     </div>
-
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6">
-                        <Link href={`/profile/${story.authorUsername}`} className="mb-3 w-max">
-                            <div className="flex items-center w-max gap-3 mb-3">
-                                <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-600 flex items-center justify-center">
-                                    
-                                    <img
-                                        src={story.authorProfile}
-                                        alt={story.authorName}
-                                        className="w-full h-full object-cover"
-                                        onError={(e) => {
-                                            e.target.style.display = "none";
-                                            e.target.nextSibling.style.display =
-                                                "flex";
-                                        }}
-                                    />
-                                    <span className="text-white font-semibold hidden">
-                                        {story.authorName
-                                            ?.charAt(0)
-                                            .toUpperCase() || "U"}
-                                    </span>
-                                </div>
-                                <div className="flex flex-col">
-                                    <span className="font-semibold text-white">
-                                        {story.authorName}
-                                    </span>
-                                    <span className="text-xs text-accent">
-                                        @{story.authorUsername}
-                                    </span>
-                                </div>
+                    <div className=" w-full">
+                        <div className="absolute bottom-0 left-0 right-0 flex justify-between bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6">
+                            <div>
+                                <Link
+                                    href={`/profile/${story.authorUsername}`}
+                                    className="mb-3 w-max"
+                                >
+                                    <div className="flex items-center w-max gap-3 mb-3">
+                                        <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-600 flex items-center justify-center">
+                                            <img
+                                                src={story.authorProfile}
+                                                alt={story.authorName}
+                                                className="w-full h-full object-cover"
+                                                onError={(e) => {
+                                                    e.target.style.display =
+                                                        "none";
+                                                    e.target.nextSibling.style.display =
+                                                        "flex";
+                                                }}
+                                            />
+                                            <span className="text-white font-semibold hidden">
+                                                {story.authorName
+                                                    ?.charAt(0)
+                                                    .toUpperCase() || "U"}
+                                            </span>
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <span className="font-semibold text-white">
+                                                {story.authorName}
+                                            </span>
+                                            <span className="text-xs text-accent">
+                                                @{story.authorUsername}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </Link>
+                                {story.caption && (
+                                    <p className="text-sm text-accent leading-relaxed">
+                                        {story.caption}
+                                    </p>
+                                )}
                             </div>
-                        </Link>
-                        {story.caption && (
-                            <p className="text-sm text-accent leading-relaxed">
-                                {story.caption}
-                            </p>
-                        )}
+                            <div>
+                                {linkedProducts.length > 0 && (
+                                    <>
+                                        
+                                        <div className="flex gap-3 overflow-x-auto pb-2">
+                                            {linkedProducts.map((product) => (
+                                                <Link
+                                                    key={product._id}
+                                                    href={`/artworks/${product._id}`}
+                                                    className="flex-shrink-0 bg-white/10 backdrop-blur-sm rounded-lg p-3 min-w-[200px] border border-white/20 hover:bg-white/20 transition-colors duration-200 cursor-pointer"
+                                                    onClick={() =>
+                                                        handleProductClick(
+                                                            product
+                                                        )
+                                                    }
+                                                >
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-12 h-12 rounded-lg overflow-hidden bg-white/20">
+                                                            <img
+                                                                src={
+                                                                    product
+                                                                        .images?.[0] ||
+                                                                    "/placeholder.svg"
+                                                                }
+                                                                alt={
+                                                                    product.title
+                                                                }
+                                                                className="w-full h-full object-cover"
+                                                            />
+                                                        </div>
+                                                        <div className="flex-1 min-w-0">
+                                                            <p className="text-white font-medium text-sm truncate">
+                                                                {product.title}
+                                                            </p>
+                                                            <p className="text-white/70 text-xs truncate">
+                                                                ₹
+                                                                {product.price?.toLocaleString()}
+                                                            </p>
+                                                            {product.medium && (
+                                                                <Badge
+                                                                    variant="secondary"
+                                                                    className="mt-1 text-xs bg-white/20 text-white border-white/30"
+                                                                >
+                                                                    {
+                                                                        product.medium
+                                                                    }
+                                                                </Badge>
+                                                            )}
+                                                        </div>
+                                                        <Button
+                                                            size="sm"
+                                                            variant="ghost"
+                                                            className="text-white hover:bg-white/20 p-1"
+                                                        >
+                                                            <ExternalLink className="w-4 h-4" />
+                                                        </Button>
+                                                    </div>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        </div>
                     </div>
-
                     {story.mediaType === "video" && (
                         <div className="absolute top-4 right-4 bg-black/50 rounded-full p-2">
                             <div className="w-3 h-3 bg-white rounded-full opacity-60"></div>

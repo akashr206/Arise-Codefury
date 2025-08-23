@@ -58,11 +58,9 @@ export default function StoryDialog({ story, open, onOpenChange }) {
 
     const handleLike = () => {
         setIsLiked(!isLiked);
-        // TODO: Implement like functionality
     };
 
     const handleShare = () => {
-        // TODO: Implement share functionality
         if (navigator.share) {
             navigator.share({
                 title: story.caption || "Check out this story",
@@ -83,6 +81,7 @@ export default function StoryDialog({ story, open, onOpenChange }) {
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-4xl max-h-[90vh] mt-10 overflow-hidden p-0 bg-black">
                 <DialogHeader className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-b from-black/50 to-transparent p-4">
+                    <DialogTitle></DialogTitle>
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <div className="flex items-center gap-3">
@@ -240,7 +239,6 @@ export default function StoryDialog({ story, open, onOpenChange }) {
                             </div>
                         )}
 
-                        {/* Action Buttons */}
                         <div className="flex items-center gap-4">
                             <Button
                                 variant="ghost"

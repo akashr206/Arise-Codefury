@@ -217,7 +217,7 @@ export default function UploadStoryDialog({ open, onClose, show = false }) {
         <Dialog open={open} onOpenChange={onClose}>
             {show && (
                 <DialogTrigger asChild>
-                    <Button className="bg-gray-900 hover:bg-gray-800 text-white border-0 shadow-lg">
+                    <Button variant={"outline"}>
                         <Plus className="w-4 h-4 mr-2" />
                         Create Story
                     </Button>
