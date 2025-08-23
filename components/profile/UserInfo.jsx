@@ -14,11 +14,21 @@ import {
     BadgeCheck,
 } from "lucide-react";
 import { SignOutButton, SignedIn } from "@clerk/nextjs";
+import { useState, useEffect } from "react";
 export default function UserInfo({ artist }) {
     const { user: currentUser } = useUserContext();
-
+    const [sum, setSum] = useState([]);
     const isOwnProfile =
         currentUser && currentUser.username === artist?.username;
+    useEffect(() => {
+        async function fetchSum() {
+            const res = await fetch(`/api/stories/count`);
+            const data = await res.json();
+            console.log(data);
+            setSum(data);
+        }
+        fetchSum();
+    }, []);
 
     return (
         <Card className="w-full shadow-none max-w-4xl mt-20  mx-auto border-none px-4 sm:px-6">
@@ -162,7 +172,7 @@ export default function UserInfo({ artist }) {
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 py-4">
                                 <div className="text-center">
                                     <div className="text-xl sm:text-2xl font-bold text-primary">
-                                        {artist?.artworksCount || 0}
+                                        {sum[0] || 0}
                                     </div>
                                     <div className="text-xs sm:text-sm text-muted-foreground">
                                         Artworks
@@ -170,7 +180,7 @@ export default function UserInfo({ artist }) {
                                 </div>
                                 <div className="text-center">
                                     <div className="text-xl sm:text-2xl font-bold text-primary">
-                                        {artist?.storiesCount || 0}
+                                        {sum[1] || 0}
                                     </div>
                                     <div className="text-xs sm:text-sm text-muted-foreground">
                                         Stories
