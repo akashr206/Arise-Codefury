@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { X } from "lucide-react"
+import Map from "./Map"
 
 const stateData = {
   "jammu-kashmir": {
@@ -191,130 +192,10 @@ const stateData = {
   },
 }
 
-const stateAreas = [
-  // Jammu & Kashmir (large red area at top)
-  { id: "jammu-kashmir", left: "34%", top: "2%", width: "12%", height: "15%" },
-
-  // Himachal Pradesh (yellow, between J&K and other states)
-  {
-    id: "himachal-pradesh",
-    left: "38%",
-    top: "16%",
-    width: "5%",
-    height: "8%",
-  },
-
-  // Punjab (yellow-green, left of Himachal)
-  { id: "punjab", left: "35%", top: "20%", width: "5%", height: "6%" },
-
-  // Haryana (small cyan area)
-  { id: "haryana", left: "36%", top: "26%", width: "5%", height: "5%" },
-
-  // Delhi (tiny blue dot)
-  { id: "delhi", left: "35.5%", top: "26%", width: "1.5%", height: "1.5%" },
-
-  // Uttarakhand (purple area to right of Himachal)
-  { id: "uttarakhand", left: "42%", top: "21%", width: "5%", height: "7%" },
-
-  // Uttar Pradesh (large green area in center-north)
-  { id: "uttar-pradesh", left: "42%", top: "28%", width: "12%", height: "13%" },
-
-  // Bihar (salmon/orange color, east of UP)
-  { id: "bihar", left: "53%", top: "35%", width: "9%", height: "8%" },
-
-  // Jharkhand (yellow/gold area below Bihar)
-  { id: "jharkhand", left: "55%", top: "43%", width: "5%", height: "8%" },
-
-  // West Bengal (cyan/blue area, far east)
-  { id: "west-bengal", left: "60%", top: "42%", width: "7%", height: "10%" },
-
-  // Sikkim (tiny blue area)
-  { id: "sikkim", left: "61%", top: "32%", width: "3%", height: "3%" },
-
-  // Assam (yellow area in northeast)
-  { id: "assam", left: "66%", top: "34%", width: "9%", height: "4%" },
-
-  // Arunachal Pradesh (red area, far northeast)
-  {
-    id: "arunachal-pradesh",
-    left: "70%",
-    top: "28%",
-    width: "10%",
-    height: "6%",
-  },
-
-  // Nagaland (purple, small area in northeast)
-  { id: "nagaland", left: "74%", top: "34%", width: "3%", height: "5%" },
-
-  // Manipur (green area below Nagaland)
-  { id: "manipur", left: "74%", top: "39%", width: "3%", height: "5%" },
-
-  // Mizoram (red area, southeast of Manipur)
-  { id: "mizoram", left: "71%", top: "44%", width: "3%", height: "5%" },
-
-  // Tripura (green area)
-  { id: "tripura", left: "69%", top: "44%", width: "3%", height: "4%" },
-
-  // Meghalaya (yellow area)
-  { id: "meghalaya", left: "67%", top: "38%", width: "5%", height: "3%" },
-
-  // Rajasthan (large purple area on left)
-  { id: "rajasthan", left: "24%", top: "30%", width: "15%", height: "12%" },
-
-  // Gujarat (yellow area, southwest)
-  { id: "gujarat", left: "23%", top: "44%", width: "10%", height: "16%" },
-
-  // Madhya Pradesh (pink area, large central state)
-  {
-    id: "madhya-pradesh",
-    left: "34%",
-    top: "42%",
-    width: "15%",
-    height: "11%",
-  },
-
-  // Chhattisgarh (blue area, right of MP)
-  { id: "chhattisgarh", left: "47%", top: "47%", width: "8%", height: "14%" },
-
-  // Odisha (yellow-gold area on east coast)
-  { id: "odisha", left: "52%", top: "52%", width: "10%", height: "11%" },
-
-  // Maharashtra (large salmon/red area)
-  { id: "maharashtra", left: "27%", top: "55%", width: "17%", height: "13%" },
-
-  // Goa (small purple area on west coast)
-  { id: "goa", left: "31%", top: "71%", width: "3%", height: "3%" },
-
-  // Telangana (yellow area, center-south)
-  { id: "telangana", left: "40%", top: "61%", width: "7%", height: "10%" },
-
-  // Andhra Pradesh (pink area, southeast)
-  {
-    id: "andhra-pradesh",
-    left: "41%",
-    top: "70%",
-    width: "10%",
-    height: "12%",
-  },
-
-  // Karnataka (purple area, southwest)
-  { id: "karnataka", left: "34%", top: "68%", width: "7%", height: "17%" },
-
-  // Tamil Nadu (green area, far south)
-  { id: "tamil-nadu", left: "40%", top: "81%", width: "6%", height: "14%" },
-
-  // Kerala (red area on southwest coast)
-  { id: "kerala", left: "35%", top: "85%", width: "4%", height: "13%" },
-]
-
 export default function IndiaArtMap() {
   const [selectedState, setSelectedState] = useState(null)
   const [hoveredState, setHoveredState] = useState(null)
 
-  useEffect(() => {
-    // Don't disable body scrolling when modal is open
-    // Let the modal handle its own scrolling
-  }, [selectedState])
 
   const handleStateClick = (stateId) => {
     setSelectedState(stateId)
@@ -325,15 +206,12 @@ export default function IndiaArtMap() {
   }
 
   return (
-    <div className="w-full h-screen bg-slate-50 dark:bg-purple-500/10 relative overflow-hidden">
+    <div className="w-full h-screen relative overflow-hidden">
       {/* Header */}
-      <div className="absolute top-0 left-0 right-0 z-20 bg-white shadow-sm dark:bg-purple-600/10 p-2 sm:p-4">
-        <h1 className="text-lg sm:text-2xl font-bold text-center text-gray-800 dark:text-white">
+      <div className="p-2 sm:p-4">
+        <h1 className="text-lg sm:text-2xl font-bold text-center">
           Traditional Art Forms of India
         </h1>
-        <p className="text-xs sm:text-sm text-gray-600 text-center mt-1 dark:text-white/50">
-          Click on any state to explore its traditional art form
-        </p>
       </div>
 
       <div className="flex w-full h-full pt-16 sm:pt-20">
@@ -343,43 +221,7 @@ export default function IndiaArtMap() {
             selectedState ? "w-1/2 lg:w-2/3" : "w-full"
           } h-full`}
         >
-          <div
-            className="relative w-full h-full flex items-center justify-center p-4"
-            onClick={selectedState ? closeModal : undefined}
-          >
-            {/* India Map */}
-            <div className="relative max-w-4xl max-h-full w-full h-full">
-              <img
-                src="/India.png"
-                alt="India Map"
-                className={`w-full h-full object-contain ${selectedState ? "cursor-pointer" : ""}`}
-                style={{ maxHeight: "100%", maxWidth: "100%" }}
-              />
-
-              {/* Invisible but clickable state areas */}
-              <div className="absolute inset-0">
-                {stateAreas.map((area) => (
-                  <button
-                    key={area.id}
-                    className="absolute bg-transparent border-none cursor-pointer"
-                    style={{
-                      left: area.left,
-                      top: area.top,
-                      width: area.width,
-                      height: area.height,
-                    }}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      handleStateClick(area.id)
-                    }}
-                    onMouseEnter={() => setHoveredState(area.id)}
-                    onMouseLeave={() => setHoveredState(null)}
-                    aria-label={`Click to learn about ${stateData[area.id]?.name}`}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
+            
 
           {/* Hover tooltip */}
           {hoveredState && !selectedState && (
@@ -389,14 +231,12 @@ export default function IndiaArtMap() {
             </div>
           )}
         </div>
+        <Map></Map>
 
-        {/* Modal/Detail Panel - Responsive Design */}
         {selectedState && stateData[selectedState] && (
           <>
-            {/* Mobile Modal Overlay */}
             <div className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden" onClick={closeModal} />
 
-            {/* Modal Content */}
             <div
               className={`
               fixed md:relative
@@ -412,10 +252,7 @@ export default function IndiaArtMap() {
               top-20
             `}
             >
-              {/* Background map image for modal */}
-              <div className="absolute inset-0 opacity-10">
-                <img src="/India.png" alt="India Map Background" className="w-full h-full object-cover" />
-              </div>
+              
 
               <div className="relative z-10 p-4 sm:p-6 lg:p-8">
                 {/* Mobile drag handle */}

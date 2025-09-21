@@ -141,7 +141,6 @@ export default function StoryFeed() {
                                 src={story.mediaUrl}
                                 className="w-full h-full object-contain"
                                 loop
-                                muted
                                 playsInline
                                 preload="metadata"
                                 onLoadStart={() => {
