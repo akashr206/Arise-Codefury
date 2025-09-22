@@ -6,7 +6,7 @@ import Footer from "@/components/landing/Footer";
 
 export default function page() {
     return (
-        <div className="flex flex-col mt-22">
+        <div className="flex flex-col">
             <HeroSection />
             <ImageBasedIndia />
             <About />

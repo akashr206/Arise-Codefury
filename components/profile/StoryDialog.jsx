@@ -130,6 +130,7 @@ export default function StoryDialog({ story, open, onOpenChange }) {
                                     src={story.mediaUrl}
                                     className="w-full h-full object-cover"
                                     autoPlay={isPlaying}
+                                    
                                     muted={!isPlaying}
                                     loop
                                     onPlay={() => setIsPlaying(true)}
@@ -237,51 +238,6 @@ export default function StoryDialog({ story, open, onOpenChange }) {
                                 </div>
                             </div>
                         )}
-
-                        <div className="flex items-center gap-4">
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={handleLike}
-                                className={`text-white hover:bg-white/20 ${
-                                    isLiked ? "text-red-400" : ""
-                                }`}
-                            >
-                                <Heart
-                                    className={`w-5 h-5 ${
-                                        isLiked ? "fill-current" : ""
-                                    }`}
-                                />
-                                <span className="ml-2">
-                                    {story.likesCount || 0}
-                                </span>
-                            </Button>
-
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                className="text-white hover:bg-white/20"
-                            >
-                                <MessageCircle className="w-5 h-5" />
-                                <span className="ml-2">
-                                    {story.commentsCount || 0}
-                                </span>
-                            </Button>
-
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={handleShare}
-                                className="text-white hover:bg-white/20"
-                            >
-                                <Share2 className="w-5 h-5" />
-                            </Button>
-
-                            <div className="ml-auto flex items-center text-white/80 text-sm">
-                                <Eye className="w-4 h-4 mr-1" />
-                                {story.viewsCount || 0} views
-                            </div>
-                        </div>
                     </div>
                 </div>
             </DialogContent>

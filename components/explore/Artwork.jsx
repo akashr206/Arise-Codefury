@@ -195,7 +195,7 @@ export default function Artwork({ artwork }) {
                                             ] || "/placeholder.svg"
                                         }
                                         alt={product.title}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                        className="w-full h-full object-cover duration-700"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
@@ -313,12 +313,14 @@ export default function Artwork({ artwork }) {
                                 <div className="flex items-start gap-4">
                                     <div className="w-16 h-16 border-2 overflow-hidden rounded-full border-primary/20">
                                         {product.artistProfile && (
-                                            <img
-                                                src={
-                                                    product.artistProfile ||
-                                                    "/placeholder.svg"
-                                                }
-                                            />
+                                            <Link href={`/profile/${product.artistUsername}`}>
+                                                <img
+                                                    src={
+                                                        product.artistProfile ||
+                                                        "/placeholder.svg"
+                                                    }
+                                                />
+                                            </Link>
                                         )}
                                         <div className="bg-primary/10 text-primary">
                                             {product.artistName

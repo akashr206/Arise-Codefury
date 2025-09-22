@@ -81,7 +81,6 @@ export default function Feeds({ stories = [], products = [] }) {
             router.push(`/artworks/${feed.id}`);
         } else if (feed.type === "story") {
             setActivereel(feed);
-            console.log(feed);
         }
     };
 
@@ -102,7 +101,7 @@ export default function Feeds({ stories = [], products = [] }) {
                                 className="w-full h-auto object-cover rounded-xl"
                                 preload="metadata"
                                 muted
-                                playsInline
+                                autoPlay
                             />
                         ) : (
                             <img
