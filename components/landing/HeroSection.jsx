@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Button } from "../ui/button";
 import { ArrowUpRight } from "lucide-react";
 import { Poppins } from "next/font/google";
+import { useRouter } from "next/navigation";
 
 const PoppinsFont = Poppins({
     variable: "--font-poppins",
@@ -17,6 +18,7 @@ export default function HeroSection() {
         { src: "/warli.jpeg", alt: "warli", title: "Warli" },
         { src: "/gond.jpeg", alt: "gond", title: "Gond" },
     ];
+    const router = useRouter();
     return (
         <section
             className={`${PoppinsFont.className} --font-poppins min-h-screen flex flex-col items-center bg-background justify-center overflow-hidden`}
@@ -65,8 +67,17 @@ export default function HeroSection() {
                     ))}
                 </div>
                 <div className="flex gap-2 mt-4 items-center justify-center">
-                    <Button variant={"secondary"}>Explore</Button>
-                    <Button variant={"primary"} className={" text-background border hover:opacity-85"}>
+                    <Button
+                        onClick={() => router.push("/explore")}
+                        variant={"secondary"}
+                    >
+                        Explore
+                    </Button>
+                    <Button
+                        onClick={() => router.push("/shop")}
+                        variant={"primary"}
+                        className={" text-background border hover:opacity-85"}
+                    >
                         Shop now
                         <ArrowUpRight></ArrowUpRight>
                     </Button>

@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import UserActions from "@/components/UserActions";
 import { cinzel } from '../lib/fonts'
+import { set } from "mongoose";
 
 const Navbar = () => {
     const navs = [
@@ -14,18 +15,24 @@ const Navbar = () => {
         { title: "Shop", link: "/shop" },
         { title: "Export Compliances", link: "/export" },
     ];
+    const [active, setActive] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
     const [menuHeight, setMenuHeight] = useState(0);
     const menuRef = useRef(null);
 
     useEffect(() => {
         if (menuRef.current) {
-            console.log(menuRef.current.scrollHeight);
-
             setMenuHeight(menuRef.current.scrollHeight);
         }
     }, [isOpen]);
 
+    useEffect(() => {
+        const currentPath = window.location.pathname;
+        const activeNav = navs.find((nav) => currentPath.includes(nav.link));
+        setActive(activeNav ? activeNav.link : null);
+        setIsOpen(false);
+    }, [window.location.pathname]);
+    
     return (
         <header
             className={cn(
@@ -51,10 +58,12 @@ const Navbar = () => {
                     <nav>
                         <ul className="flex gap-5 max-md:hidden">
                             {navs.map((nav, ind) => (
+                                
                                 <li
                                     key={ind}
-                                    className="opacity-85 hover:font-semibold hover:opacity-100 transition-all"
+                                    className={cn("opacity-85 flex items-center gap-1 hover:font-semibold hover:opacity-100 transition-all", active === nav.link && "font-semibold opacity-100")}
                                 >
+                                    {active === nav.link && (<div className="w-2 h-2 bg-foreground rounded-full"></div>)}
                                     <Link href={nav.link}>{nav.title}</Link>
                                 </li>
                             ))}
