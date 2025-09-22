@@ -5,8 +5,8 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import UserActions from "@/components/UserActions";
-import { cinzel } from '../lib/fonts'
-import { set } from "mongoose";
+import { cinzel } from "../lib/fonts";
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
     const navs = [
@@ -19,6 +19,7 @@ const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [menuHeight, setMenuHeight] = useState(0);
     const menuRef = useRef(null);
+    const pathname = usePathname();
 
     useEffect(() => {
         if (menuRef.current) {
@@ -27,12 +28,11 @@ const Navbar = () => {
     }, [isOpen]);
 
     useEffect(() => {
-        const currentPath = window.location.pathname;
-        const activeNav = navs.find((nav) => currentPath.includes(nav.link));
+        const activeNav = navs.find((nav) => pathname.includes(nav.link));
         setActive(activeNav ? activeNav.link : null);
         setIsOpen(false);
-    }, [window.location.pathname]);
-    
+    }, [pathname]);
+
     return (
         <header
             className={cn(
@@ -51,19 +51,26 @@ const Navbar = () => {
             >
                 <div className="w-full  flex justify-between items-center">
                     <Link href={"/"} className="overflow-hidden rounded-md">
-                        <h2 className={`font-bold text-xl tracking-wider ${cinzel.className}`}>
+                        <h2
+                            className={`font-bold text-xl tracking-wider ${cinzel.className}`}
+                        >
                             ARISE
                         </h2>
                     </Link>
                     <nav>
                         <ul className="flex gap-5 max-md:hidden">
                             {navs.map((nav, ind) => (
-                                
                                 <li
                                     key={ind}
-                                    className={cn("opacity-85 flex items-center gap-1 hover:font-semibold hover:opacity-100 transition-all", active === nav.link && "font-semibold opacity-100")}
+                                    className={cn(
+                                        "opacity-85 flex items-center gap-1 hover:font-semibold hover:opacity-100 transition-all",
+                                        active === nav.link &&
+                                            "font-semibold opacity-100"
+                                    )}
                                 >
-                                    {active === nav.link && (<div className="w-2 h-2 bg-foreground rounded-full"></div>)}
+                                    {active === nav.link && (
+                                        <div className="w-2 h-2 bg-foreground rounded-full"></div>
+                                    )}
                                     <Link href={nav.link}>{nav.title}</Link>
                                 </li>
                             ))}
@@ -71,7 +78,7 @@ const Navbar = () => {
                     </nav>
                     <div className="flex items-center gap-2 justify-center">
                         <ThemeToggle></ThemeToggle>
-                        <div >
+                        <div>
                             <UserActions></UserActions>
                         </div>
                         <button
